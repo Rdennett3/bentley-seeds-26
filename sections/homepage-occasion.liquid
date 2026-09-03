@@ -1,0 +1,257 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  .section-{{ section.id }} {
+    width: 100%;
+    height: auto;
+    padding: 2.5% 0;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-{{ section.id }} .occasion-title {
+    width:100%;
+    height:auto;
+    padding:2.5% 0;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+  }
+
+  .section-{{ section.id }} .occasion-title-wrapper {
+    width:var(--inner-width);
+    display:flex;
+    align-items:flex-start;
+    justify-content: flex-start;
+  }
+
+  .section-{{ section.id }} .occassion-heading {
+    font-size: clamp(28px, 4vw, 48px);
+  }
+
+  .section-{{ section.id }} .occassion-wrapper {
+    width: var(--inner-width);
+    min-height: 40vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2em;
+  }
+
+  .section-{{ section.id }} .occassion-item {
+    position: relative;
+    min-height: 50vh;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    border:1px solid #000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .section-{{ section.id }} .occassion-item__link {
+    position: absolute;
+    inset: 0;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .section-{{ section.id }} .occassion-item__title {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    margin: 0;
+    z-index: 2;
+    color:#000;
+    font-size: clamp(1.5rem, 2vw, 2.5rem);
+    line-height: 1.1;
+    font-weight:200;
+    padding:10px 5%;
+    border:1px solid #000;
+    border-radius:10px;
+    background:var(--off-white);
+  }
+
+  .section-{{ section.id }} .occassion-item:nth-of-type(1) {
+    grid-area: 1 / 1 / 2 / 3;
+  }
+
+  .section-{{ section.id }} .occassion-item:nth-of-type(2) {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+
+  .section-{{ section.id }} .occassion-item:nth-of-type(3) {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .section-{{ section.id }} .occassion-item:nth-of-type(4) {
+    grid-area: 2 / 2 / 3 / 3;
+  }
+
+  .section-{{ section.id }} .occassion-item:nth-of-type(5) {
+    grid-area: 2 / 3 / 3 / 4;
+  }
+
+  @media screen and (max-width: 990px) {
+    .section-{{ section.id }} .occassion-wrapper {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(1) {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(2) {
+      grid-area: 1 / 2 / 2 / 3;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(3) {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(4) {
+      grid-area: 2 / 2 / 3 / 3;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(5) {
+      grid-area: 3 / 1 / 4 / 3;
+    }
+  }
+
+  @media screen and (max-width: 650px) {
+    .section-{{ section.id }} .occassion-wrapper {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, 1fr);
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(1) {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(2) {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(3) {
+      grid-area: 3 / 1 / 4 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(4) {
+      grid-area: 4 / 1 / 5 / 2;
+    }
+
+    .section-{{ section.id }} .occassion-item:nth-of-type(5) {
+      grid-area: 5 / 1 / 6 / 2;
+    }
+  }
+{% endstyle %}
+
+<section class="section-{{ section.id }} full-width">
+  <div class="occasion-title">
+    <div class="occasion-title-wrapper">
+      <h2 class="occassion-heading"><strong>Shop</strong> By Occassion</h2>
+    </div>
+  </div>
+  <div class="occassion-wrapper">
+    {% for block in section.blocks %}
+      {% liquid
+        assign collection = block.settings.collection
+        assign title = block.settings.title
+        assign image = block.settings.image
+
+        if title == blank and collection != blank
+          assign title = collection.title
+        endif
+      %}
+
+      <div
+        class="occassion-item"
+        {{ block.shopify_attributes }}
+
+        {% if image != blank %}
+          style="            background-image: url('{{ image | image_url: width: 1800 }}');"
+        {% endif %}
+      >
+        {% if collection != blank %}
+          <a
+            href="{{ collection.url }}"
+            class="occassion-item__link"
+            aria-label="{{ title | escape }}"
+          >
+            {% if title != blank %}
+              <h3 class="occassion-item__title">
+                {{ title }}
+              </h3>
+            {% endif %}
+          </a>
+
+        {% elsif title != blank %}
+          <h3 class="occassion-item__title">
+            {{ title }}
+          </h3>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Homepage Occasion",
+  "tag": "section",
+  "class": "shopify-section",
+  "max_blocks": 5,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "occasion",
+      "name": "Occasion",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "If left blank, the collection title will be used."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Homepage Occasion",
+      "blocks": [
+        {
+          "type": "occasion"
+        },
+        {
+          "type": "occasion"
+        },
+        {
+          "type": "occasion"
+        },
+        {
+          "type": "occasion"
+        },
+        {
+          "type": "occasion"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

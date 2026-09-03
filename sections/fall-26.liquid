@@ -1,0 +1,34 @@
+{% liquid
+
+%}
+
+{% style %}
+  .section-{{ section.id }} {
+
+  }
+{% endstyle %}
+
+<section class="section-{{ section.id }}">
+  <div class="fall-wrapper">
+    <div class="fall-section"></div>
+    <div class="fall-section"></div>
+  </div>
+</section>
+
+{% javascript %}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Fall 2026 Planting",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Fall 2026 Planting"
+    }
+  ]
+}
+{% endschema %}

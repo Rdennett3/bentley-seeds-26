@@ -1,0 +1,716 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<section
+  id="PinnedImages-{{ section.id }}"
+  class="pinned-images full-width"
+  style="
+    --section-bg: {{ section.settings.background_color }};
+    --text-color: {{ section.settings.text_color }};
+    --button-bg: {{ section.settings.button_background }};
+    --button-color: {{ section.settings.button_text_color }};
+    --image-width: {{ section.settings.image_width }}px;
+  "
+>
+  <div class="pinned-images__stage">
+    <div class="trans-1"></div>
+    <div class="pinned-images__content">
+      {% if section.settings.heading != blank %}
+        <h2 class="pinned-images__heading">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.body != blank %}
+        <div class="pinned-images__body rte">
+          {{ section.settings.body }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.button_text != blank %}
+        <a
+          href="{{ section.settings.button_link | default: '#' }}"
+          class="pinned-images__button main-btn"
+        >
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.image_one != blank %}
+      <div class="pinned-images__image-wrap pinned-images__image-wrap--one">
+        {{
+          section.settings.image_one
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 990px) 40vw, 70vw',
+            class: 'pinned-images__image'
+        }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.image_two != blank %}
+      <div class="pinned-images__image-wrap pinned-images__image-wrap--two">
+        {{
+          section.settings.image_two
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 990px) 40vw, 70vw',
+            class: 'pinned-images__image'
+        }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.image_three != blank %}
+      <div class="pinned-images__image-wrap pinned-images__image-wrap--three">
+        {{
+          section.settings.image_three
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1000, 1200',
+            sizes: '(min-width: 990px) 40vw, 70vw',
+            class: 'pinned-images__image'
+        }}
+      </div>
+    {% endif %}
+    <div class="trans-2"></div>
+  </div>
+</section>
+
+{% style %}
+    #PinnedImages-{{ section.id }} {
+      position: relative;
+      width: 100%;
+      /* background:#AABD8C; */
+
+      /* background: var(--section-bg); */
+      /* background-image: url({{ 'contour-light.svg' | asset_url }});
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover; */
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__stage {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      overflow: hidden;
+      display: flex;
+      flex-direction:column;
+      justify-content: center;
+      align-items: center;
+      background-image: url({{ 'contour-light.svg' | asset_url }});
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      /* background: var(--section-bg); */
+    }
+
+
+    .trans-1 {
+        width:100%;
+        height:200px;
+        background-image:linear-gradient(to bottom, rgba(248, 249, 246, 1) 25%, rgba(248, 249, 246, .4) 50%, rgba(248, 249, 246, .1));
+        position:absolute;
+        top:0;
+        left:0;
+    }
+
+    .trans-2 {
+        width:100%;
+        height:200px;
+        background-image:linear-gradient(to bottom, rgba(248, 249, 246, .1) 25%,rgba(248, 249, 246, .4) 50%, rgba(248, 249, 246, 1));
+        position:absolute;
+        bottom:0;
+        left:0;
+    }
+
+    /* ------------------------------
+       CENTER CONTENT
+    ------------------------------ */
+
+    #PinnedImages-{{ section.id }} .pinned-images__content {
+      position: relative;
+      z-index: 2;
+      width: min(90%, 700px);
+      text-align: center;
+      color: var(--text-color);
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__heading {
+      margin: 0 0 20px;
+      font-size: clamp(36px, 5vw, 72px);
+      line-height: 1;
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__body {
+      margin: 0 auto 30px;
+      max-width: 600px;
+      font-size: clamp(16px, 1.5vw, 20px);
+      line-height: 1.6;
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__body p {
+      margin-top: 0;
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius:10px;
+      padding: 14px 28px;
+
+      background: var(--button-bg);
+      color: var(--button-color);
+
+      text-decoration: none;
+
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__button:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+
+    /* ------------------------------
+       IMAGES
+    ------------------------------ */
+
+    #PinnedImages-{{ section.id }} .pinned-images__image-wrap {
+      position: absolute;
+      z-index: 3;
+      width: min(var(--image-width), 38vw);
+      will-change: transform;
+      pointer-events: none;
+    }
+
+
+    #PinnedImages-{{ section.id }} .pinned-images__image {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+
+    /* LEFT IMAGE */
+
+    #PinnedImages-{{ section.id }} .pinned-images__image-wrap--one {
+      left: 5%;
+      top: 100%;
+      transform:rotate(-10deg);
+    }
+
+    #PinnedImages-{{ section.id }} .pinned-images__image-wrap--one img {
+      border-radius:10px;
+    }
+
+
+    /* RIGHT IMAGE */
+
+    #PinnedImages-{{ section.id }} .pinned-images__image-wrap--two {
+      right: 5%;
+      top: 100%;
+      transform:rotate(10deg);
+    }
+
+    #PinnedImages-{{ section.id }} .pinned-images__image-wrap--two img {
+      border-radius:10px;
+    }
+
+  /* THIRD / LEFT IMAGE */
+
+  #PinnedImages-{{ section.id }} .pinned-images__image-wrap--three {
+      left: 5%;
+      top: 100%;
+      transform: rotate(-6deg);
+  }
+
+  #PinnedImages-{{ section.id }} .pinned-images__image-wrap--three img {
+      border-radius: 10px;
+  }
+
+    /* ------------------------------
+       MOBILE
+    ------------------------------ */
+
+   @media screen and (max-width: 749px) {
+
+      #PinnedImages-{{ section.id }} .pinned-images__content {
+          width: 85%;
+      }
+
+      #PinnedImages-{{ section.id }} .pinned-images__image-wrap {
+          width: 55vw;
+      }
+
+      #PinnedImages-{{ section.id }} .pinned-images__image-wrap--one {
+          left: -8%;
+      }
+
+      #PinnedImages-{{ section.id }} .pinned-images__image-wrap--two {
+          right: -8%;
+      }
+
+      #PinnedImages-{{ section.id }} .pinned-images__image-wrap--three {
+          left: -8%;
+      }
+
+  }
+{% endstyle %}
+
+<script>
+      (() => {
+
+        function initPinnedImages{{ section.id | replace: '-', '_' }}() {
+
+          const section = document.querySelector(
+            '#PinnedImages-{{ section.id }}'
+          );
+
+          if (!section) return;
+
+          if (
+            typeof gsap === 'undefined' ||
+            typeof ScrollTrigger === 'undefined'
+          ) {
+            console.warn(
+              'GSAP and ScrollTrigger are required for the pinned image section.'
+            );
+
+            return;
+          }
+
+
+          gsap.registerPlugin(ScrollTrigger);
+
+
+          /*
+           * Kill an existing instance if the
+           * Shopify Theme Editor reloads the section.
+           */
+
+          if (section._pinnedImagesTimeline) {
+            section._pinnedImagesTimeline.scrollTrigger?.kill();
+            section._pinnedImagesTimeline.kill();
+          }
+
+
+          const stage = section.querySelector(
+      '.pinned-images__stage'
+    );
+
+    const imageOne = section.querySelector(
+      '.pinned-images__image-wrap--one'
+    );
+
+    const imageTwo = section.querySelector(
+      '.pinned-images__image-wrap--two'
+    );
+
+    const imageThree = section.querySelector(
+      '.pinned-images__image-wrap--three'
+    );
+
+
+    const imageOneInner = imageOne?.querySelector(
+      '.pinned-images__image'
+    );
+
+    const imageTwoInner = imageTwo?.querySelector(
+      '.pinned-images__image'
+    );
+
+    const imageThreeInner = imageThree?.querySelector(
+      '.pinned-images__image'
+    );
+
+
+          if (!stage) return;
+
+
+          /*
+           * Set initial image position.
+           *
+           * yPercent: 0 means the image starts
+           * underneath the viewport because CSS
+           * already has top: 100%.
+           */
+
+          if (imageOne) {
+            gsap.set(imageOne, {
+              yPercent: 0
+            });
+          }
+
+
+          if (imageTwo) {
+            gsap.set(imageTwo, {
+              yPercent: 0
+            });
+          }
+
+          if (imageThree) {
+            gsap.set(imageThree, {
+              yPercent: 0
+            });
+          }
+
+
+          const timeline = gsap.timeline({
+
+            scrollTrigger: {
+
+              trigger: section,
+
+              start: 'top top',
+
+              /*
+               * Controls how long the entire animation lasts.
+               *
+               * 300% = roughly three viewport heights
+               * of scrolling while the stage stays pinned.
+               */
+
+              end: '+=400%',
+
+              pin: stage,
+
+              scrub: 1,
+
+              anticipatePin: 1,
+
+              invalidateOnRefresh: true,
+
+              // markers: true,
+
+            }
+
+          });
+
+
+          /*
+   * -------------------------------------
+   * IMAGE ONE
+   * -------------------------------------
+   */
+
+  if (imageOne) {
+
+    /*
+     * VERTICAL SCROLL
+     */
+
+    timeline.to(
+      imageOne,
+      {
+        y: () =>
+          -(
+            window.innerHeight +
+            imageOne.offsetHeight +
+            window.innerHeight * 0.15
+          ),
+
+        ease: 'none',
+        duration: 1
+      },
+      0
+    );
+
+
+    /*
+     * IMAGE ONE MOTION
+     *
+     * Experiment here with:
+     * scale
+     * rotation
+     * x
+     * xPercent
+     * opacity
+     * etc.
+     */
+
+    if (imageOneInner) {
+
+      timeline.to(
+        imageOneInner,
+        {
+          scale: 1.1,
+          rotation: 10,
+          ease: 'none',
+          duration: 1
+        },
+        0
+      );
+
+    }
+
+  }
+
+
+  /*
+   * -------------------------------------
+   * IMAGE TWO
+   * -------------------------------------
+   */
+
+  if (imageTwo) {
+
+    /*
+     * VERTICAL SCROLL
+     */
+
+    timeline.to(
+      imageTwo,
+      {
+        y: () =>
+          -(
+            window.innerHeight +
+            imageTwo.offsetHeight +
+            window.innerHeight * 0.15
+          ),
+
+        ease: 'none',
+        duration: 1
+      },
+      0.35
+    );
+
+
+    /*
+     * IMAGE TWO MOTION
+     */
+
+    if (imageTwoInner) {
+
+      timeline.to(
+        imageTwoInner,
+        {
+          rotation: -15,
+          ease: 'none',
+          duration: 1
+        },
+        0.35
+      );
+
+    }
+
+  }
+
+
+  /*
+   * -------------------------------------
+   * IMAGE THREE
+   * -------------------------------------
+   */
+
+  if (imageThree) {
+
+    /*
+     * VERTICAL SCROLL
+     *
+     * Starts after image two.
+     */
+
+    timeline.to(
+      imageThree,
+      {
+        y: () =>
+          -(
+            window.innerHeight +
+            imageThree.offsetHeight +
+            window.innerHeight * 0.15
+          ),
+
+        ease: 'none',
+        duration: 1
+      },
+      0.75
+    );
+
+
+    /*
+     * IMAGE THREE MOTION
+     */
+
+    if (imageThreeInner) {
+
+      timeline.to(
+        imageThreeInner,
+        {
+          scale:.7,
+          rotation: 20,
+          ease: 'none',
+          duration: 1
+        },
+        0.75
+      );
+
+    }
+
+  }
+
+
+          section._pinnedImagesTimeline = timeline;
+
+
+          ScrollTrigger.refresh();
+
+        }
+
+
+        /*
+         * Normal storefront load
+         */
+
+        if (document.readyState === 'loading') {
+
+          document.addEventListener(
+            'DOMContentLoaded',
+            initPinnedImages{{ section.id | replace: '-', '_' }}
+          );
+
+        } else {
+
+          initPinnedImages{{ section.id | replace: '-', '_' }}();
+
+        }
+
+
+        /*
+         * Shopify Theme Editor support
+         */
+
+        document.addEventListener(
+          'shopify:section:load',
+          (event) => {
+
+            if (
+              event.target.querySelector(
+                '#PinnedImages-{{ section.id }}'
+              )
+            ) {
+              initPinnedImages{{ section.id | replace: '-', '_' }}();
+            }
+
+          }
+        );
+
+      })();
+</script>
+
+{% schema %}
+{
+  "name": "Pinned scrolling images",
+  "tag": "section",
+  "class": "section-pinned-images",
+
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Growing something beautiful"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>Use this area to introduce your collection, story, or featured products.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_one",
+      "label": "Left image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_two",
+      "label": "Right image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_three",
+      "label": "Second left image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Desktop image width",
+      "min": 250,
+      "max": 700,
+      "step": 25,
+      "unit": "px",
+      "default": 450
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f3f0e8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Pinned scrolling images"
+    }
+  ]
+}
+{% endschema %}

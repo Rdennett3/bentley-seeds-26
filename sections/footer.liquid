@@ -1,0 +1,191 @@
+<footer class="full-width">
+  <div class="footer-section">
+    {% if section.settings.footer_logo != blank %}
+      <a
+        href="{{ routes.root_url }}"
+        class="footer-logo"
+        aria-label="{{ shop.name | escape }} home"
+      >
+        {{
+          section.settings.footer_logo
+          | image_url: width: 600
+          | image_tag:
+            class: 'footer-logo__image',
+            loading: 'lazy',
+            widths: '150, 250, 350, 450, 600',
+            sizes: '250px',
+            alt: section.settings.footer_logo.alt
+          | default: shop.name
+        }}
+      </a>
+    {% endif %}
+  </div>
+  <div class="footer-section">
+    <div class="footer-section-container">
+      {% if section.settings.footer_menu_1 != blank %}
+        <ul>
+          {% for link in section.settings.footer_menu_1.links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.settings.footer_menu_2 != blank %}
+        <ul>
+          {% for link in section.settings.footer_menu_2.links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.settings.footer_menu_3 != blank %}
+        <ul>
+          {% for link in section.settings.footer_menu_3.links %}
+            <li>
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+  <div class="footer-section">
+    <div class="footer__copyright">
+      &copy;
+      {{ 'now' | date: '%Y' }}
+      {{ shop.name | link_to: routes.root_url }}
+    </div>
+  </div>
+  {% comment %}
+    <div class="footer__copyright">
+      &copy;
+      {{ 'now' | date: '%Y' }}
+      {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+    </div>
+
+    <div class="footer__links">
+      {% for link in section.settings.menu.links %}
+        {{ link.title | link_to: link.url }}
+      {% endfor %}
+    </div>
+
+    <div class="footer__payment">
+      {% if section.settings.show_payment_icons %}
+        {% for type in shop.enabled_payment_types %}
+          {{ type | payment_type_svg_tag }}
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endcomment %}
+</footer>
+
+{% stylesheet %}
+  footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 2rem;
+    min-height: 70vh;
+    border-top: 1px solid #000;
+    /* align-items: center;
+    justify-content: center; */
+  }
+
+  .footer-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-section:first-of-type {
+    border-bottom: 1px solid #000;
+    padding: 2em;
+  }
+
+  .footer-section:last-of-type {
+    background: #f4912b;
+    padding: 1em 0;
+  }
+
+  .footer-logo img {
+    width: 250px;
+    height: auto;
+  }
+
+  .footer-section-container {
+    width: 80%;
+    height: auto;
+    padding: 5% 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3em;
+  }
+
+  .footer-section-container ul li {
+    list-style-type: none;
+    margin-bottom: 15px;
+  }
+
+  .footer-section-container ul li a {
+    font-size: 1.25em;
+  }
+
+  footer a {
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+  footer .footer__links,
+  footer .footer__payment {
+    display: flex;
+    gap: 1rem;
+  }
+
+  footer .footer__copyright {
+    background: #f4912b;
+  }
+
+  @media screen and (max-width: 749px) {
+    .footer-section-container {
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "footer_menu_1",
+      "label": "Footer Menu 1"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_2",
+      "label": "Footer Menu 2"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_3",
+      "label": "Footer Menu 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer logo"
+    }
+  ]
+}
+{% endschema %}

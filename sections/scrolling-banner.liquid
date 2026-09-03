@@ -1,0 +1,129 @@
+{% style %}
+    .scrolling-banner {
+    width: 100%;
+    padding: {{ section.settings.outer_padding }}px 0;
+    background: {{ section.settings.background }};
+  }
+
+  .scrolling-banner__inner {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .scrolling-banner__marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee {{ section.settings.speed }}s linear infinite;
+  }
+
+  .scrolling-banner__track {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .scrolling-banner__item {
+    white-space: nowrap;
+    padding-right: 80px;
+    color: {{ section.settings.text_color }};
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: 600;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .scrolling-banner:hover .scrolling-banner__marquee {
+    animation-play-state: paused;
+  }
+{% endstyle %}
+
+<section class="scrolling-banner full-width">
+  <div class="page-width">
+    <div class="scrolling-banner__inner">
+      <div class="scrolling-banner__marquee">
+        <div class="scrolling-banner__track">
+          {% for i in (1..8) %}
+            <span class="scrolling-banner__item">
+              {{ section.settings.message }}
+            </span>
+          {% endfor %}
+        </div>
+
+        <div class="scrolling-banner__track" aria-hidden="true">
+          {% for i in (1..8) %}
+            <span class="scrolling-banner__item">
+              {{ section.settings.message }}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Scrolling Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Banner Message",
+      "default": "Free Shipping on Orders Over $50"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "outer_padding",
+      "label": "Outer Padding",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Banner"
+    }
+  ]
+}
+{% endschema %}

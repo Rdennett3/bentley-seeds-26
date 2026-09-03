@@ -1,0 +1,85 @@
+{% comment %}
+  Reusable pagination component
+
+  Usage:
+  {% render 'pagination', paginate: paginate %}
+{% endcomment %}
+
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+
+{% if paginate.pages > 1 %}
+  <nav
+    class="pagination"
+    role="navigation"
+    aria-label="Pagination"
+  >
+    <div class="pagination__inner">
+      {% if paginate.previous %}
+        <a
+          href="{{ paginate.previous.url }}"
+          class="pagination__button pagination__button--previous"
+          aria-label="Previous page"
+        >
+          <span aria-hidden="true">←</span>
+          <span class="pagination__label">Previous</span>
+        </a>
+      {% else %}
+        <span
+          class="pagination__button pagination__button--previous pagination__button--disabled"
+          aria-disabled="true"
+        >
+          <span aria-hidden="true">←</span>
+          <span class="pagination__label">Previous</span>
+        </span>
+      {% endif %}
+
+      <div class="pagination__pages">
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <a
+              href="{{ part.url }}"
+              class="pagination__page"
+              aria-label="Page {{ part.title }}"
+            >
+              {{ part.title }}
+            </a>
+
+          {% else %}
+            {% if part.title == paginate.current_page %}
+              <span
+                class="pagination__page pagination__page--current"
+                aria-current="page"
+              >
+                {{ part.title }}
+              </span>
+
+            {% else %}
+              <span class="pagination__ellipsis">
+                {{ part.title }}
+              </span>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if paginate.next %}
+        <a
+          href="{{ paginate.next.url }}"
+          class="pagination__button pagination__button--next"
+          aria-label="Next page"
+        >
+          <span class="pagination__label">Next</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      {% else %}
+        <span
+          class="pagination__button pagination__button--next pagination__button--disabled"
+          aria-disabled="true"
+        >
+          <span class="pagination__label">Next</span>
+          <span aria-hidden="true">→</span>
+        </span>
+      {% endif %}
+    </div>
+  </nav>
+{% endif %}

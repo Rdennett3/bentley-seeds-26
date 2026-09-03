@@ -1,0 +1,41 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/logo_bentley_new_out_black_OPT.png",
+        "logo_width": 180,
+        "menu": "main-menu-26",
+        "menu_font_size": 15,
+        "menu_spacing": 40,
+        "wholesale_text": "Wholesale Login",
+        "wholesale_url": "",
+        "search_placeholder": "Search our store",
+        "show_icon_labels": true,
+        "mega_menu_columns": 3,
+        "mega_menu_vertical_padding": 40,
+        "mega_menu_background": "#f8f9f6",
+        "mega_menu_text": "#1a1a1a",
+        "max_width": 1400,
+        "main_row_height": 95,
+        "background_color": "#f8f9f6",
+        "text_color": "#1a1a1a",
+        "border_color": "#dddddd"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

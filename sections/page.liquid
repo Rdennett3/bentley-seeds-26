@@ -1,0 +1,42 @@
+{% comment %}
+  This section is used in the page template to render store pages like About us
+  or Contact us.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+{% endcomment %}
+
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="content-container full-width">
+  <div class="content-wrapper">
+    <h1>{{ page.title }}</h1>
+    {{ page.content }}
+  </div>
+</div>
+
+{% comment %} {{ page.content }} {% endcomment %}
+
+{% stylesheet %}
+  .content-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5% 0;
+  }
+
+  .content-wrapper {
+    width: var(--page-inner-width);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": []
+}
+{% endschema %}

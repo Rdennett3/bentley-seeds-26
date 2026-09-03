@@ -1,0 +1,161 @@
+{% comment %}
+  This section is fetched through Shopify's Section Rendering API.
+
+  Example request:
+  /collections/vegetables?page=2&section_id=seed-finder-results
+{% endcomment %}
+
+{% paginate collection.products by 8 %}
+  <div
+    class="seed-finder-results"
+    data-seed-results
+    data-current-page="{{ paginate.current_page }}"
+    data-total-pages="{{ paginate.pages }}"
+    data-product-count="{{ paginate.items }}"
+  >
+    {% for product in collection.products %}
+      {% liquid
+        assign grid_image = product.images[2]
+
+        if grid_image == blank
+          assign grid_image = product.featured_image
+        endif
+
+        assign product_variant = product.selected_or_first_available_variant
+      %}
+
+      <article
+        class="seed-finder__product"
+        data-seed-product
+        data-product-handle="{{ product.handle }}"
+      >
+        <div class="seed-finder__product-link">
+          <a
+            href="{{ product.url }}"
+            class="seed-finder__product-image-link"
+            aria-label="{{ product.title | escape }}"
+          >
+            <div class="seed-finder__image-wrapper">
+              {% if grid_image != blank %}
+                {{
+                  grid_image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '240, 360, 480, 640, 800',
+                    sizes: '(min-width: 990px) 25vw, 50vw',
+                    class: 'seed-finder__image',
+                    alt: grid_image.alt
+                }}
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'seed-finder__placeholder' }}
+              {% endif %}
+
+              {% unless product.available %}
+                <span class="seed-finder__badge"> Sold out </span>
+              {% endunless %}
+            </div>
+          </a>
+
+          <div class="seed-finder__product-content">
+            <div class="product-content-item">
+              <h3 class="seed-finder__product-title">
+                <a href="{{ product.url }}">
+                  {{ product.title }}
+                </a>
+              </h3>
+
+              <div class="seed-finder__price">
+                {% if product.price_varies %}
+                  <span> From {{ product.price_min | money }} </span>
+                {% else %}
+                  <span>
+                    {{ product.price | money }}
+                  </span>
+                {% endif %}
+
+                {% if product.compare_at_price_max > product.price %}
+                  <s class="seed-finder__compare-price">
+                    {{ product.compare_at_price_max | money }}
+                  </s>
+                {% endif %}
+              </div>
+            </div>
+            <div class="product-content-item">
+              {% if product_variant != blank and product_variant.available %}
+                <div class="purchase-container">
+                  <div
+                    class="seed-finder__purchase"
+                    data-seed-purchase
+                    data-variant-id="{{ product_variant.id }}"
+                  >
+                    <div class="seed-finder__quantity">
+                      <button
+                        type="button"
+                        class="seed-finder__quantity-button"
+                        data-quantity-minus
+                        aria-label="Decrease quantity for {{ product.title | escape }}"
+                      >
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        class="seed-finder__quantity-input"
+                        value="1"
+                        min="1"
+                        step="1"
+                        inputmode="numeric"
+                        data-quantity-input
+                        aria-label="Quantity for {{ product.title | escape }}"
+                      >
+
+                      <button
+                        type="button"
+                        class="seed-finder__quantity-button"
+                        data-quantity-plus
+                        aria-label="Increase quantity for {{ product.title | escape }}"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="seed-finder__add-to-cart"
+                      data-seed-add-to-cart
+                    >
+                      Add to cart
+                    </button>
+
+                    <div
+                      class="seed-finder__cart-message"
+                      data-seed-cart-message
+                      aria-live="polite"
+                    ></div>
+                  </div>
+                </div>
+
+              {% else %}
+                <button
+                  type="button"
+                  class="seed-finder__add-to-cart"
+                  disabled
+                >
+                  Sold out
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Seed finder results",
+  "settings": []
+}
+{% endschema %}

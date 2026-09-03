@@ -1,0 +1,179 @@
+{% comment %}
+  This section is used in the 404 template to render page shown when customers
+  enter an invalid store URL.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
+{% endcomment %}
+
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="err-container full-width">
+  <div class="err-section">
+    <h1>{{ '404.title' | t }}</h1>
+  </div>
+  <div class="err-section marquee">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <h2>Looks Like This Page Is Still Growing.</h2>
+      </div>
+    </div>
+  </div>
+  <div class="err-section full-width">
+    <div class="lower-err-section">
+      <a href="/" class="err-btn">Return To Homepage</a>
+    </div>
+    <div class="lower-err-section">
+      <a href="/collections/sale" class="err-btn">See What's On Sale</a>
+    </div>
+  </div>
+  <div class="err-section"></div>
+</div>
+
+{% comment %}
+  <div class="err-wrapper">
+    <div class="err-section">
+      <h1>{{ '404.title' | t }}</h1>
+      <h2>UH OH!</h2>
+      <h3>Looks like this page is still growing!</h3>
+    </div>
+    <div class="err-section"></div>
+  </div>
+{% endcomment %}
+
+{% comment %}
+  <h1>{{ '404.title' | t }}</h1>
+
+  <p>
+    {{ '404.not_found' | t }}
+  </p>
+
+  <a href="{{ routes.all_products_collection_url }}">
+    {{ '404.back_to_shopping' | t }}
+     </a>
+{% endcomment %}
+
+{% stylesheet %}
+  .err-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .err-section {
+    width: 100%;
+    height: auto;
+  }
+
+  .err-section:nth-of-type(1) {
+    background: var(--orange);
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border-bottom: 1px solid var(--black); */
+    padding: 5% 0;
+  }
+
+  .err-section:nth-of-type(2) {
+    padding: 2.5% 0;
+  }
+
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: var(--inner-width);
+  }
+
+  .marquee-group {
+    display: flex;
+    gap: 3rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding-left: 3rem;
+    /* margin-left: 5%; */
+  }
+
+  .err-section:nth-of-type(3) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .lower-err-section {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    background: var(--black);
+  }
+
+  .lower-err-section a {
+    margin-top: 0 !important;
+  }
+
+  .err-section:nth-of-type(4) {
+    height: 25px;
+    background: var(--orange);
+  }
+
+  .err-section h1 {
+    font-size: clamp(5em, 15vw, 15em);
+    -webkit-text-stroke: 3px var(--black);
+    color: var(--orange);
+  }
+
+  .err-section h2 {
+    font-size: clamp(2em, 6vw, 8em);
+  }
+
+  .err-section h3 {
+    font-size: clamp(1.5em, 3vw, 3em);
+  }
+
+  .err-btn {
+    padding: 10px 5%;
+    background: var(--off-white);
+    font-size: 1.5em;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  const marquee = document.querySelector('.marquee');
+  const track = marquee.querySelector('.marquee-track');
+  const group = marquee.querySelector('.marquee-group');
+
+  // Clone automatically
+  const clone = group.cloneNode(true);
+  clone.setAttribute('aria-hidden', 'true');
+  track.appendChild(clone);
+
+  // Calculate speed based on width
+  const pixelsPerSecond = 200;
+  const distance = group.offsetWidth;
+  const duration = distance / pixelsPerSecond;
+
+  gsap.to(track, {
+    x: -distance,
+    duration: duration,
+    ease: 'none',
+    repeat: -1,
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:general.404",
+  "settings": []
+}
+{% endschema %}

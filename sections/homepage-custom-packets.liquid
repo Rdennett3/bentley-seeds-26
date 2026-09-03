@@ -1,0 +1,287 @@
+{% comment %} {{ 'variables.css' | stylesheet_tag | asset_url }} {% endcomment %}
+
+{% liquid
+
+%}
+
+{% style %}
+    .section-{{ section.id }} {}
+
+    .custom-container {
+      width:100%;
+      height:auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .custom-wrapper {
+      width:95%;
+      height:auto;
+      display:flex;
+      flex-direction:column;
+      gap:1em;
+      padding:2.5% 0 5% 0;
+    }
+
+    #custom-image-section {
+    position: relative;
+    width: 100%;
+    height: clamp(320px, 45vw, 650px);
+    overflow: hidden;
+  }
+
+  #custom-image-section img {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    width: clamp(130px, 18vw, 280px);
+    height: auto;
+    transform: translateX(-50%);
+    transform-origin: center bottom;
+    will-change: transform;
+    /* box-shadow:10px 10px 30px #000; */
+  }
+
+  /* Middle image sits visually on top */
+  #custom-image-section img:nth-child(1) {
+    z-index: 1;
+  }
+
+  #custom-image-section img:nth-child(2) {
+    z-index: 2;
+  }
+
+  #custom-image-section img:nth-child(3) {
+    z-index: 5;
+  }
+
+  #custom-image-section img:nth-child(4) {
+    z-index: 2;
+  }
+
+  #custom-image-section img:nth-child(5) {
+    z-index: 1;
+  }
+
+  .text-container {
+    width:100%;
+    height:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  .text-header h2 {
+    font-size:3em;
+    font-weight:100;
+  }
+
+  .text-header h2 span{
+    font-weight:700;
+  }
+
+  .text-body {
+    max-width:50%;
+  }
+
+  /* .custom-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 28px;
+    padding: 13px 24px;
+    color: #000;
+    background: #F4912B;
+    text-decoration: none;
+    border-radius: 10px;
+  } */
+
+  @media screen and (max-width: 749px) {
+    #custom-image-section {
+      height: 360px;
+      overflow: hidden;
+    }
+
+    #custom-image-section img {
+      width: clamp(90px, 27vw, 135px);
+      bottom: 6%;
+    }
+  }
+{% endstyle %}
+
+<section class="section-{{ section.id }} custom-container full-width">
+  <div class="custom-wrapper">
+    <div class="custom-area" id="custom-image-section">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0562/4205/files/8igub5.webp?v=1784645539"
+        alt="Blue seed packet with custom text"
+        width="800"
+        height="1200"
+      >
+
+      <img
+        src="https://cdn.shopify.com/s/files/1/0562/4205/files/SWC-392-FRONT-shopify780.webp?v=1784645539"
+        alt="White save-the-date seed packet with custom text"
+        width="800"
+        height="1200"
+      >
+
+      <img
+        src="https://cdn.shopify.com/s/files/1/0562/4205/files/SWC-402-front-shopify-750.webp?v=1784645539"
+        alt="White seed packet with red birds and custom text"
+        width="800"
+        height="1200"
+      >
+
+      <img
+        src="https://cdn.shopify.com/s/files/1/0562/4205/files/45ehu9.webp?v=1784645539"
+        alt="Green seed packet with floral pattern and custom text"
+        width="800"
+        height="1200"
+      >
+
+      <img
+        src="https://cdn.shopify.com/s/files/1/0562/4205/files/57tsci.webp?v=1784645539"
+        alt="White seed packet with butterfly and custom text"
+        width="800"
+        height="1200"
+      >
+    </div>
+
+    <div class="custom-area">
+      <div class="text-container">
+        {% if section.settings.heading != blank %}
+          <div class="text-header">
+            <h2>
+              {% if section.settings.highlighted_heading != blank %}
+                <span>{{ section.settings.highlighted_heading }}</span>
+              {% endif %}
+
+              {{ section.settings.heading }}
+            </h2>
+          </div>
+        {% endif %}
+
+        {% if section.settings.body_text != blank %}
+          <div class="text-body">
+            {{ section.settings.body_text }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.button_text != blank %}
+          <div class="custom-button-area">
+            <a
+              class="main-btn"
+              {% if section.settings.button_link != blank %}
+                href="{{ section.settings.button_link }}"
+              {% else %}
+                role="link"
+                aria-disabled="true"
+              {% endif %}
+            >
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const section = document.querySelector('#custom-image-section');
+
+    if (!section) return;
+
+    const images = section.querySelectorAll('img');
+
+    const isMobile = window.matchMedia('(max-width: 749px)').matches;
+
+    const finalPositions = isMobile
+      ? [
+          { xPercent: -125, y: -30, rotation: -12 },
+          { xPercent: -95, y: -55, rotation: -6 },
+          { xPercent: -50, y: -65, rotation: 0 },
+          { xPercent: -5, y: -55, rotation: 6 },
+          { xPercent: 25, y: -30, rotation: 12 },
+        ]
+      : [
+          { xPercent: -190, y: -55, rotation: -14 },
+          { xPercent: -110, y: -100, rotation: -7 },
+          { xPercent: -50, y: -110, rotation: 0 },
+          { xPercent: 30, y: -100, rotation: 7 },
+          { xPercent: 110, y: -55, rotation: 14 },
+        ];
+
+    gsap.set(images, {
+      xPercent: -50,
+      y: 80,
+      rotation: 0,
+      scale: 0.9,
+    });
+
+    gsap.to(images, {
+      xPercent: (index) => finalPositions[index].xPercent,
+      y: (index) => finalPositions[index].y,
+      rotation: (index) => finalPositions[index].rotation,
+      scale: 1,
+      duration: 1.2,
+      ease: 'power3.out',
+      stagger: 0.08,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 75%',
+      },
+    });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Custom Seed Packets",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "highlighted_heading",
+      "label": "Bold heading text",
+      "default": "Custom"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Seed Packets"
+    },
+    {
+      "type": "richtext",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "<p>Create personalized seed packets for weddings, events, promotions, and special occasions.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Custom Packets"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Seed Packets"
+    }
+  ]
+}
+{% endschema %}

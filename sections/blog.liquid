@@ -1,0 +1,194 @@
+{% comment %}
+  This section is used in the blog template to render the blog page listing all
+  articles within a blog.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
+{% endcomment %}
+
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="blog-title-container">
+  <h1>{{ blog.title }}</h1>
+</div>
+
+{% paginate blog.articles by 8 %}
+  <div class="blog-container">
+    {% for article in blog.articles %}
+      <div class="article-container">
+        <div class="image-wrapper">
+          <a href="{{ article.url }}">
+            {% if article.image %}
+              {{
+                article.image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                  alt: article.image.alt
+              }}
+            {% elsif section.settings.default_blog_image %}
+              {{
+                section.settings.default_blog_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                  alt: article.title
+              }}
+            {% endif %}
+          </a>
+        </div>
+
+        <div class="info-wrapper">
+          <h2 class="article-title">
+            <a href="{{ article.url }}">
+              {{ article.title }}
+            </a>
+          </h2>
+
+          <div class="article-meta">
+            <span class="article-blog">
+              {{ blog.title }}
+            </span>
+
+            <span class="article-date">
+              {{ article.published_at | date: '%B %d, %Y' }}
+            </span>
+          </div>
+
+          <div class="article-excerpt">
+            {% if article.excerpt != blank %}
+              {{ article.excerpt | strip_html | truncatewords: 30 }}
+            {% else %}
+              {{ article.content | strip_html | truncatewords: 30 }}
+            {% endif %}
+          </div>
+
+          <a href="{{ article.url }}" class="article-read-more main-btn"> Read More </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if paginate.pages > 1 %}
+    <div class="blog-pagination">
+      {% render 'pagination', paginate: paginate %}
+    </div>
+  {% endif %}
+{% endpaginate %}
+{% style %}
+  .blog-pagination {
+    width: 100%;
+    margin-top: 2.5em;
+  }
+
+  .blog-title-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2.5% 0;
+  }
+
+  .blog-container {
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
+  }
+
+  .article-container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--black);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-bottom: 1px solid black;
+    max-height: 30vh;
+  }
+
+  .image-wrapper a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .image-wrapper img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .article-title {
+    margin: 0 0 0.75em;
+  }
+
+  .article-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em 1em;
+    margin-bottom: 1em;
+    font-size: 0.9rem;
+  }
+
+  .article-excerpt {
+    margin-bottom: 1.5em;
+    line-height: 1.5;
+  }
+
+  .article-read-more {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+
+  @media screen and (max-width: 990px) {
+    .blog-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .blog-container {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "t:general.blog",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "default_blog_image",
+      "label": "Default article image"
+    }
+  ]
+}
+{% endschema %}

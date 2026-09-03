@@ -1,0 +1,24 @@
+:root {
+    --inner-width: 90%;
+    --max-inner-width: 1600px;
+    --black: #000000;
+    --off-white: #F8F9F6;
+    --light-grey: #f5f5f5;
+    --orange: #F4912B;
+    --smoke: #F5F5F5;
+    --page-inner-width: 85%;
+    --radius: 10px;
+}
+
+.main-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 28px;
+    padding: 13px 40px;
+    color: #000;
+    background: #F4912B;
+    border: 1px solid var(--black);
+    text-decoration: none;
+    border-radius: 10px;
+}

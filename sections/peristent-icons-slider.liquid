@@ -1,0 +1,1094 @@
+{% liquid
+  assign slide_count = section.blocks.size
+%}
+
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<section
+  id="PersistentIconsSlider-{{ section.id }}"
+  class="persistent-icons-slider"
+  style="
+    --section-background: {{ section.settings.background_color }};
+    --text-color: {{ section.settings.text_color }};
+    --button-background: {{ section.settings.button_background }};
+    --button-color: {{ section.settings.button_color }};
+  "
+>
+  <div class="persistent-icons-slider__inner">
+    <!-- Left column -->
+    <div class="persistent-icons-slider__content-column">
+      <!-- This Swiper changes with each slide -->
+      <div
+        class="swiper persistent-icons-slider__text-swiper"
+        data-text-swiper
+      >
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div
+              class="swiper-slide persistent-icons-slider__text-slide"
+              {{ block.shopify_attributes }}
+            >
+              <div class="persistent-icons-slider__text-content">
+                {% if block.settings.eyebrow != blank %}
+                  <p class="persistent-icons-slider__eyebrow">
+                    {{ block.settings.eyebrow }}
+                  </p>
+                {% endif %}
+
+                {% if block.settings.heading != blank %}
+                  <h2 class="persistent-icons-slider__heading">
+                    {{ block.settings.heading }}
+                  </h2>
+                {% endif %}
+
+                {% if block.settings.text != blank %}
+                  <div class="persistent-icons-slider__text rte">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+
+                {% if block.settings.button_label != blank %}
+                  <a
+                    class="persistent-icons-slider__content-button main-btn"
+                    {% if block.settings.button_link != blank %}
+                      href="{{ block.settings.button_link }}"
+                    {% else %}
+                      role="link"
+                      aria-disabled="true"
+                    {% endif %}
+                  >
+                    {{ block.settings.button_label }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- This row remains visible for every slide -->
+      <div class="persistent-icons-slider__features">
+        {% for index in (1..3) %}
+          {% liquid
+            assign icon_key = 'icon_' | append: index
+            assign title_key = 'icon_title_' | append: index
+            assign text_key = 'icon_text_' | append: index
+
+            assign icon = section.settings[icon_key]
+            assign icon_title = section.settings[title_key]
+            assign icon_text = section.settings[text_key]
+          %}
+
+          <div class="persistent-icons-slider__feature">
+            {% if icon != blank %}
+              <div class="persistent-icons-slider__icon-wrapper">
+                {{
+                  icon
+                  | image_url: width: 160
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '60, 80, 120, 160',
+                    sizes: '80px',
+                    class: 'persistent-icons-slider__icon'
+                }}
+              </div>
+            {% else %}
+              <div class="persistent-icons-slider__icon-placeholder">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+
+            {% if icon_title != blank %}
+              <h3 class="persistent-icons-slider__feature-title">
+                {{ icon_title }}
+              </h3>
+            {% endif %}
+
+            {% if icon_text != blank %}
+              <p class="persistent-icons-slider__feature-text">
+                {{ icon_text }}
+              </p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="persistent-icons-slider__media-column">
+      <div class="persistent-icons-slider__media-inner">
+        <div
+          class="swiper persistent-icons-slider__image-swiper"
+          data-image-swiper
+        >
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              <div class="swiper-slide persistent-icons-slider__image-slide">
+                {% if block.settings.image != blank %}
+                  <picture>
+                    {% if block.settings.mobile_image != blank %}
+                      <source
+                        media="(max-width: 749px)"
+                        srcset="
+                          {{ block.settings.mobile_image | image_url: width: 500 }} 500w,
+                          {{ block.settings.mobile_image | image_url: width: 750 }} 750w,
+                          {{ block.settings.mobile_image | image_url: width: 1000 }} 1000w
+                        "
+                        sizes="100vw"
+                      >
+                    {% endif %}
+
+                    {{
+                      block.settings.image
+                      | image_url: width: 2000
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '600, 900, 1200, 1600, 2000',
+                        sizes: '(min-width: 990px) 50vw, 100vw',
+                        class: 'persistent-icons-slider__image'
+                    }}
+                  </picture>
+                {% else %}
+                  <div class="persistent-icons-slider__image-placeholder">
+                    {{ 'lifestyle-1' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if slide_count > 1 %}
+          <div
+            class="persistent-icons-slider__navigation"
+            aria-label="Slider navigation"
+          >
+            <button
+              type="button"
+              class="persistent-icons-slider__nav-button persistent-icons-slider__nav-button--previous"
+              data-slider-previous
+              aria-label="Show previous slide"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="persistent-icons-slider__nav-button persistent-icons-slider__nav-button--next"
+              data-slider-next
+              aria-label="Show next slide"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+              >
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+      #PersistentIconsSlider-{{ section.id }} {
+        {% comment %} width: var(--inner-width); {% endcomment %}
+        max-width:var(--max-inner-width);
+        color: var(--text-color);
+        height:auto;
+      }
+
+      #PersistentIconsSlider-{{ section.id }} * {
+        box-sizing: border-box;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        {% comment %} margin-bottom:2em; {% endcomment %}
+        border-bottom-right-radius:10px;
+        border-bottom-left-radius:10px;
+        height:auto;
+      }
+
+      /* Left column */
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__content-column {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 60px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-swiper {
+        width: 100%;
+        flex: 1 1 auto;
+        max-height:50vh;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-swiper .swiper-wrapper {
+        align-items: stretch;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-slide {
+        display: flex;
+        height: auto;
+        align-items: flex-start;
+        max-height:70vh;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-content {
+        width: 100%;
+        max-width: 620px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 450ms ease,
+          transform 550ms ease;
+        height:100%;
+        padding:5% 0;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-slide.swiper-slide-active
+      .persistent-icons-slider__text-content {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 150ms;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-slide.swiper-slide-prev
+      .persistent-icons-slider__text-content {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text-slide.swiper-slide-next
+      .persistent-icons-slider__text-content {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__eyebrow {
+        margin: 0 0 12px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        line-height: 1.3;
+        text-transform: uppercase;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__heading {
+        margin: 0 0 20px;
+        color: inherit;
+        font-size: clamp(2rem, 3vw, 4.25rem);
+        line-height: 1.05;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text {
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text > *:first-child {
+        margin-top: 0;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__text > *:last-child {
+        margin-bottom: 0;
+      }
+
+      {% comment %} #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__content-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 28px;
+        padding: 13px 24px;
+        color: #000;
+        background: #F4912B;
+        text-decoration: none;
+        border-radius:10px;
+      } {% endcomment %}
+
+      /* Persistent icons */
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__features {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        flex: 0 0 auto;
+        padding:10px 25px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius:10px;
+      }
+
+      @media screen and (max-width:900px) {
+        #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__features {
+          display:none;
+      }
+    }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__feature {
+        text-align: center;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__icon-wrapper,
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__icon-placeholder {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 14px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__icon {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__icon-placeholder svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__feature-title {
+        margin: 0 0 6px;
+        color: inherit;
+        font-size: 1rem;
+        line-height: 1.3;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__feature-text {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      /* Right image column */
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__media-column {
+        min-width: 0;
+        padding: 20px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__media-inner {
+        position: relative;
+        width: 100%;
+        height:auto;
+        overflow: hidden;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-swiper,
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-swiper .swiper-wrapper,
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-slide {
+        width: 100%;
+        height: 95%;
+        border-radius:10px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-slide {
+        overflow: hidden;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-slide picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image,
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-placeholder,
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-placeholder svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image {
+        object-fit: cover;
+        transform: scale(1.04);
+        transition: transform 900ms ease;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__image-slide.swiper-slide-active
+      .persistent-icons-slider__image {
+        transform: scale(1);
+      }
+
+      /* Navigation overlay */
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__navigation {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        z-index: 5;
+        display: flex;
+        gap: 5px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__nav-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        color: #000;
+        background: #F4912B;
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition:
+          opacity 200ms ease,
+          transform 200ms ease;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__nav-button:hover {
+        transform: scale(1.06);
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__nav-button:focus-visible {
+        outline: 3px solid currentColor;
+        outline-offset: 3px;
+      }
+
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__nav-button.swiper-button-disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+
+      /*
+        Prevent Swiper from inserting or showing its default arrow graphics.
+      */
+      #PersistentIconsSlider-{{ section.id }}
+      .persistent-icons-slider__nav-button::after {
+        display: none !important;
+        content: none !important;
+      }
+
+      @media screen and (max-width: 989px) {
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__inner {
+          grid-template-columns: 1fr;
+          margin-bottom:2em;
+          margin-top:2em;
+        }
+
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__content-column {
+          padding: 40px 24px;
+        }
+
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__text-swiper {
+          min-height: 220px;
+        }
+
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__features {
+          margin-top: 32px;
+        }
+
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__media-inner {
+          min-height: 520px;
+        }
+      }
+
+      @media screen and (max-width: 749px) {
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 560px;
+      overflow: hidden;
+    }
+
+    /*
+      Put both columns in the same grid position so the text
+      sits on top of the image.
+    */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__content-column,
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__media-column {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    /* Full-size mobile image */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__media-column {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 560px;
+      min-width: 0;
+      padding: 0;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__media-inner {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__image-swiper,
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__image-swiper .swiper-wrapper,
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__image-slide,
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__image-slide picture {
+      width: 100%;
+      height: 100%;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /*
+      Dark gradient makes the overlaid text easier to read.
+    */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__media-inner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.72) 0%,
+          rgba(0, 0, 0, 0.38) 45%,
+          rgba(0, 0, 0, 0.05) 75%
+        );
+    }
+
+    /* Text overlay */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__content-column {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      height: 90%;
+      min-width: 0;
+      padding: 32px 24px 105px;
+      color: #ffffff;
+      pointer-events: none;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__text-swiper {
+      width: 100%;
+      min-height: 0;
+      flex: 0 0 auto;
+      overflow: hidden;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__text-slide {
+      align-items: flex-end;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__text-content {
+      width: 100%;
+      max-width: none;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__eyebrow {
+      margin-bottom: 8px;
+      color: inherit;
+      font-size: 0.75rem;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__heading {
+      margin-bottom: 12px;
+      color: inherit;
+      font-size: clamp(2rem, 9vw, 3.25rem);
+      line-height: 1.05;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__text {
+      color: inherit;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    /*
+      Re-enable links inside the overlaid text, since the parent
+      uses pointer-events: none.
+    */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__content-button {
+      position: relative;
+      z-index: 4;
+      margin-top: 20px;
+      pointer-events: auto;
+    }
+
+    /* Hide the three persistent icons on mobile */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__features {
+      display: none;
+    }
+
+    /* Keep arrows above the gradient and text */
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__navigation {
+      right: 20px;
+      bottom: 24px;
+      z-index: 5;
+    }
+
+    #PersistentIconsSlider-{{ section.id }}
+    .persistent-icons-slider__nav-button {
+      width: 46px;
+      height: 46px;
+    }
+  }
+
+      @media (prefers-reduced-motion: reduce) {
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__text-content,
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__image,
+        #PersistentIconsSlider-{{ section.id }}
+        .persistent-icons-slider__nav-button {
+          transition: none;
+        }
+      }
+</style>
+
+<script>
+  (() => {
+    const sectionId = 'PersistentIconsSlider-{{ section.id }}';
+    const swiperVersion = '14.0.5';
+
+    function loadSwiperAssets() {
+      return new Promise((resolve, reject) => {
+        if (window.Swiper) {
+          resolve();
+          return;
+        }
+
+        if (!document.querySelector('[data-swiper-stylesheet]')) {
+          const stylesheet = document.createElement('link');
+          stylesheet.rel = 'stylesheet';
+          stylesheet.href =
+            `https://cdn.jsdelivr.net/npm/swiper@${swiperVersion}/swiper-bundle.min.css`;
+          stylesheet.dataset.swiperStylesheet = 'true';
+          document.head.appendChild(stylesheet);
+        }
+
+        const existingScript = document.querySelector('[data-swiper-script]');
+
+        if (existingScript) {
+          existingScript.addEventListener('load', resolve, { once: true });
+          existingScript.addEventListener('error', reject, { once: true });
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src =
+          `https://cdn.jsdelivr.net/npm/swiper@${swiperVersion}/swiper-bundle.min.js`;
+        script.dataset.swiperScript = 'true';
+        script.onload = resolve;
+        script.onerror = reject;
+
+        document.head.appendChild(script);
+      });
+    }
+
+    function initializePersistentIconsSlider() {
+      const section = document.getElementById(sectionId);
+
+      if (!section || !window.Swiper) return;
+
+      const textElement = section.querySelector('[data-text-swiper]');
+      const imageElement = section.querySelector('[data-image-swiper]');
+      const previousButton = section.querySelector('[data-slider-previous]');
+      const nextButton = section.querySelector('[data-slider-next]');
+      const slideCount = {{ slide_count | json }};
+      const shouldLoop =
+        {{ section.settings.enable_loop | json }} && slideCount > 1;
+
+      if (!textElement || !imageElement) return;
+
+      /*
+        Destroy existing instances when Shopify reloads the section
+        in the theme editor.
+      */
+      if (textElement.swiper) {
+        textElement.swiper.destroy(true, true);
+      }
+
+      if (imageElement.swiper) {
+        imageElement.swiper.destroy(true, true);
+      }
+
+      const textSwiper = new window.Swiper(textElement, {
+        slidesPerView: 1,
+        speed: {{ section.settings.transition_speed }},
+        loop: shouldLoop,
+        allowTouchMove: false,
+        autoHeight: false,
+        effect: 'slide',
+        watchSlidesProgress: true
+      });
+
+      const imageSwiper = new window.Swiper(imageElement, {
+        slidesPerView: 1,
+        speed: {{ section.settings.transition_speed }},
+        loop: shouldLoop,
+        grabCursor: slideCount > 1,
+        allowTouchMove: slideCount > 1,
+        watchSlidesProgress: true,
+        navigation: {
+            prevEl: previousButton,
+            nextEl: nextButton
+        }
+        {% comment %} autoplay: {
+            delay: 8000,
+        }, {% endcomment %}
+      });
+
+      /*
+        Keep both Swipers on the same slide.
+
+        The image Swiper is the main controller because the navigation
+        buttons are positioned over the image.
+      */
+      imageSwiper.controller.control = textSwiper;
+      textSwiper.controller.control = imageSwiper;
+
+      /*
+        Shopify block selection support. Selecting a slide block in
+        the editor moves both Swipers to that slide.
+      */
+      if (Shopify.designMode) {
+        section.addEventListener('shopify:block:select', (event) => {
+          const selectedBlock = event.target;
+          const slides = Array.from(
+            textElement.querySelectorAll(
+              '.persistent-icons-slider__text-slide:not(.swiper-slide-duplicate)'
+            )
+          );
+
+          const selectedIndex = slides.indexOf(selectedBlock);
+
+          if (selectedIndex < 0) return;
+
+          if (shouldLoop) {
+            imageSwiper.slideToLoop(selectedIndex);
+          } else {
+            imageSwiper.slideTo(selectedIndex);
+          }
+        });
+      }
+    }
+
+    loadSwiperAssets()
+      .then(initializePersistentIconsSlider)
+      .catch((error) => {
+        console.error('Unable to load Swiper for section:', error);
+      });
+
+    /*
+      Reinitialize when Shopify dynamically reloads this section
+      in the theme editor.
+    */
+    document.addEventListener('shopify:section:load', (event) => {
+      if (event.detail.sectionId === '{{ section.id }}') {
+        loadSwiperAssets().then(initializePersistentIconsSlider);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Persistent icons slider",
+  "tag": "section",
+  "class": "section-persistent-icons-slider",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Desktop minimum height",
+      "min": 500,
+      "max": 1000,
+      "step": 25,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "label": "Transition speed",
+      "min": 300,
+      "max": 1500,
+      "step": 100,
+      "unit": "ms",
+      "default": 700
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_loop",
+      "label": "Loop slides",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f3f0e8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Arrow and button background",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Arrow and button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Persistent icon 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_1",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "icon_title_1",
+      "label": "Heading",
+      "default": "Feature one"
+    },
+    {
+      "type": "textarea",
+      "id": "icon_text_1",
+      "label": "Description",
+      "default": "Add a short description for this feature."
+    },
+    {
+      "type": "header",
+      "content": "Persistent icon 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_2",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "icon_title_2",
+      "label": "Heading",
+      "default": "Feature two"
+    },
+    {
+      "type": "textarea",
+      "id": "icon_text_2",
+      "label": "Description",
+      "default": "Add a short description for this feature."
+    },
+    {
+      "type": "header",
+      "content": "Persistent icon 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_3",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "icon_title_3",
+      "label": "Heading",
+      "default": "Feature three"
+    },
+    {
+      "type": "textarea",
+      "id": "icon_text_3",
+      "label": "Description",
+      "default": "Add a short description for this feature."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Small heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Slider heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add the paragraph content for this slide.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Optional button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Optional button link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Optional mobile image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Persistent icons slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Slide one",
+            "heading": "Introduce the first feature",
+            "text": "<p>Add supporting text about the first image or feature.</p>"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Slide two",
+            "heading": "Introduce the second feature",
+            "text": "<p>Add supporting text about the second image or feature.</p>"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Slide three",
+            "heading": "Introduce the third feature",
+            "text": "<p>Add supporting text about the third image or feature.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

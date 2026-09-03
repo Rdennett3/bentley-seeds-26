@@ -1,0 +1,29 @@
+{% liquid
+
+%}
+
+{% style %}
+  .section-{{ section.id }} {
+
+  }
+{% endstyle %}
+
+<section class="section-{{ section.id }}"></section>
+
+{% javascript %}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Expandable Collections",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Expandable Collections"
+    }
+  ]
+}
+{% endschema %}

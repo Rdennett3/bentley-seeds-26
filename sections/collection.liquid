@@ -1,0 +1,459 @@
+{% comment %}
+  This section is used in the collection template to render collection page
+  listing all products within a collection.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<div class="intro-container full-width">
+  <div class="intro-wrapper">
+    <h1>{{ collection.title }}</h1>
+    <p>{{ collection.description }}</p>
+  </div>
+</div>
+
+{% paginate collection.products by 20 %}
+  <div class="collection-products full-width">
+    <div class="collection-products-wrapper">
+      {% for product in collection.products %}
+        <div class="collection-product">
+          {% if product.featured_image %}
+            {% render 'image',
+              class: 'collection-product__image',
+              image: product.featured_image,
+              url: product.url,
+              width: 400,
+              height: 400,
+              crop: 'center'
+            %}
+          {% endif %}
+
+          <div class="collection-product__content">
+            <p>{{ product.title | escape | link_to: product.url }}</p>
+            <p>{{ product.price | money }}</p>
+
+            {% if product.available %}
+              {% if product.has_only_default_variant %}
+                <form
+                  class="collection-product__form"
+                  data-collection-product-form
+                >
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                  >
+
+                  <div class="collection-product__purchase">
+                    <div class="collection-product__quantity">
+                      <button
+                        type="button"
+                        class="collection-product__quantity-button"
+                        data-quantity-minus
+                        aria-label="Decrease quantity"
+                      >
+                        &minus;
+                      </button>
+
+                      <input
+                        type="number"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        class="collection-product__quantity-input"
+                        data-quantity-input
+                        aria-label="Quantity"
+                      >
+
+                      <button
+                        type="button"
+                        class="collection-product__quantity-button"
+                        data-quantity-plus
+                        aria-label="Increase quantity"
+                      >
+                        &plus;
+                      </button>
+                    </div>
+
+                    <button
+                      type="submit"
+                      class="collection-product__add-button main-btn"
+                    >
+                      Add to cart
+                    </button>
+                  </div>
+
+                  <div
+                    class="collection-product__message"
+                    data-cart-message
+                    aria-live="polite"
+                  ></div>
+                </form>
+
+              {% else %}
+                <a
+                  href="{{ product.url }}"
+                  class="collection-product__add-button collection-product__options-button main-btn"
+                >
+                  Choose options
+                </a>
+              {% endif %}
+
+            {% else %}
+              <button
+                type="button"
+                class="collection-product__add-button main-btn"
+                disabled
+              >
+                Sold out
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% render 'pagination', paginate: paginate %}
+{% endpaginate %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    /*
+     * Quantity controls
+     */
+    document.querySelectorAll('[data-collection-product-form]').forEach((form) => {
+      const input = form.querySelector('[data-quantity-input]');
+      const minus = form.querySelector('[data-quantity-minus]');
+      const plus = form.querySelector('[data-quantity-plus]');
+
+      if (minus && input) {
+        minus.addEventListener('click', () => {
+          const currentValue = parseInt(input.value, 10) || 1;
+
+          if (currentValue > 1) {
+            input.value = currentValue - 1;
+          }
+        });
+      }
+
+      if (plus && input) {
+        plus.addEventListener('click', () => {
+          const currentValue = parseInt(input.value, 10) || 1;
+          input.value = currentValue + 1;
+        });
+      }
+
+      /*
+       * AJAX Add to Cart
+       */
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const variantInput = form.querySelector('[name="id"]');
+        const quantityInput = form.querySelector('[name="quantity"]');
+        const addButton = form.querySelector('.collection-product__add-button');
+        const message = form.querySelector('[data-cart-message]');
+
+        if (!variantInput || !quantityInput) {
+          return;
+        }
+
+        const quantity = parseInt(quantityInput.value, 10) || 1;
+
+        addButton.disabled = true;
+        addButton.textContent = 'Adding...';
+
+        if (message) {
+          message.textContent = '';
+          message.classList.remove('is-error');
+        }
+
+        try {
+          const response = await fetch(`${window.Shopify.routes.root}cart/add.js`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              items: [
+                {
+                  id: variantInput.value,
+                  quantity: quantity,
+                },
+              ],
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.description || result.message || 'Unable to add product.');
+          }
+
+          /*
+           * Get updated cart so we know the new item count.
+           */
+          const cartResponse = await fetch(`${window.Shopify.routes.root}cart.js`, {
+            headers: {
+              Accept: 'application/json',
+            },
+          });
+
+          const cart = await cartResponse.json();
+
+          if (typeof window.updateCartCount === 'function') {
+            window.updateCartCount(cart);
+          }
+
+          addButton.textContent = 'Added';
+
+          if (message) {
+            message.textContent = quantity === 1 ? 'Added to your cart.' : `${quantity} added to your cart.`;
+          }
+
+          /*
+           * Broadcast a custom event containing the updated cart.
+           * This gives your header/cart drawer something to listen for.
+           */
+          document.dispatchEvent(
+            new CustomEvent('collection:cart-updated', {
+              detail: {
+                cart: cart,
+              },
+            })
+          );
+
+          window.setTimeout(() => {
+            addButton.textContent = 'Add to cart';
+            addButton.disabled = false;
+          }, 1500);
+        } catch (error) {
+          console.error('Collection add to cart error:', error);
+
+          addButton.textContent = 'Add to cart';
+          addButton.disabled = false;
+
+          if (message) {
+            message.textContent = error.message || 'Unable to add this product.';
+
+            message.classList.add('is-error');
+          }
+        }
+      });
+    });
+  });
+</script>
+
+{% comment %}
+  <div class="collection-products">
+    {% paginate collection.products by 20 %}
+      {% for product in collection.products %}
+        <div class="collection-product">
+          {% if product.featured_image %}
+            {% render 'image',
+              class: 'collection-product__image',
+              image: product.featured_image,
+              url: product.url,
+              width: 400,
+              height: 400,
+              crop: 'center'
+            %}
+          {% endif %}
+          <div class="collection-product__content">
+            <h3>{{ product.title | escape | link_to: product.url }}</h3>
+            <p>{{ product.price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+
+      {% render 'pagination', paginate: paginate %}
+    {% endpaginate %}
+  </div>
+{% endcomment %}
+
+{% stylesheet %}
+  .intro-container {
+    width: 100%;
+    height: auto;
+    padding: 2.5% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .intro-wrapper {
+    width: var(--inner-width);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2.5% 0;
+    border: 1px solid var(--black);
+    border-radius: 10px;
+    padding-left: 5%;
+  }
+
+  .intro-wrapper h1 {
+    font-size: clamp(3rem, 3vw, 6.5rem);
+    line-height: 0.95;
+    /* letter-spacing: -0.04em; */
+    font-weight: 600;
+  }
+
+  .intro-container p {
+    max-width: 75%;
+  }
+
+  .collection-products {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: var(--inner-width); */
+  }
+
+  .collection-products-wrapper {
+    width: var(--inner-width);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em;
+    padding: 1.5% 0 5% 0;
+  }
+
+  @media screen and (max-width: 1050px) {
+    .collectionl-products {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .collection-product {
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #d5d6d7;
+  }
+  .collection-product__image {
+    border-radius: 10px;
+    margin-bottom: 25px;
+  }
+
+  .collection-product__content p {
+    font-weight: 400 !important;
+    margin-bottom: 10px;
+  }
+
+  .collection-product__content p a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .collection-product__content {
+    padding: 0 5% 2.5%;
+  }
+  .collection-product__form {
+    width: 95%;
+    margin-top: 15px;
+  }
+
+  .collection-product__purchase {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .collection-product__quantity {
+    display: flex;
+    align-items: center;
+    width: 130px;
+    height: 42px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .collection-product__quantity-button {
+    width: 40px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .collection-product__quantity-button:hover {
+    background: #f1f1f1;
+  }
+
+  .collection-product__quantity-input {
+    width: 50px;
+    height: 100%;
+    border: 0;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
+    font-size: 1rem;
+    appearance: textfield;
+  }
+
+  .collection-product__quantity-input::-webkit-outer-spin-button,
+  .collection-product__quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .collection-product__add-button {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 20px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .collection-product__add-button:hover {
+    background: transparent;
+    color: #000;
+  }
+
+  .collection-product__add-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .collection-product__options-button {
+    margin-top: 15px;
+    width: 95%;
+  }
+
+  .collection-product__message {
+    min-height: 20px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+  }
+
+  .collection-product__message.is-error {
+    color: #b00020;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %}

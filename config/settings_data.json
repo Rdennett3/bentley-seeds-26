@@ -1,0 +1,41 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "type_primary_font": "roboto_n4",
+    "background_color": "#F8F9F6",
+    "content_for_index": [],
+    "blocks": {
+      "17627155365306921321": {
+        "type": "shopify://apps/kickflip/blocks/kickflip-product-embed/852f7399-e025-496f-91ce-94176f54ae8c",
+        "disabled": false,
+        "settings": {
+          "integration_type": "customize_button",
+          "customize_button_text": "Customize",
+          "modal_width": 85,
+          "modal_height": 85,
+          "corner_radius": 0,
+          "close_button_color": "#FFFFFF",
+          "customize_button_class": "",
+          "customizer_height": 80,
+          "customizer_horizontal_padding": 0,
+          "customizer_vertical_padding": 0,
+          "advanced_mode": false,
+          "add_button_selector": "",
+          "customizer_only_selector": "",
+          "hide_selectors": "",
+          "cart_advanced_mode": false,
+          "cart_main_container_selector": "",
+          "cart_other_container_selectors": ""
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,266 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "peristent_icons_slider_KYdW3H": {
+      "type": "peristent-icons-slider",
+      "blocks": {
+        "slide_Uqk3fM": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Est. 1975",
+            "heading": "Better Gardens Start With Better Seeds",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>",
+            "button_label": "Shop Seeds",
+            "button_link": "shopify://collections/all",
+            "image": "shopify://shop_images/flowers-new.png"
+          }
+        },
+        "slide_Nnic4t": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Est. 1975",
+            "heading": "Summer Sale on NOW!",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>",
+            "button_label": "Shop The Sale",
+            "button_link": "shopify://collections",
+            "image": "shopify://shop_images/vegetables-new.png"
+          }
+        },
+        "slide_wQbWBD": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Est. 1975",
+            "heading": "Fall is on It's Way.",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>",
+            "button_label": "Shop Now",
+            "button_link": "",
+            "image": "shopify://shop_images/pumpkins-new.png"
+          }
+        }
+      },
+      "block_order": [
+        "slide_Uqk3fM",
+        "slide_Nnic4t",
+        "slide_wQbWBD"
+      ],
+      "name": "Persistent icons slider",
+      "settings": {
+        "section_height": 700,
+        "transition_speed": 700,
+        "enable_loop": true,
+        "background_color": "#f3f0e8",
+        "text_color": "#202020",
+        "button_background": "#202020",
+        "button_color": "#ffffff",
+        "icon_1": "shopify://shop_images/plant.svg",
+        "icon_title_1": "Non-GMO Seeds",
+        "icon_text_1": "",
+        "icon_2": "shopify://shop_images/agriculture_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon_title_2": "Third Generation Family Owned",
+        "icon_text_2": "",
+        "icon_3": "shopify://shop_images/emoji_nature_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg",
+        "icon_title_3": "Environmentally Responsible",
+        "icon_text_3": ""
+      }
+    },
+    "scrolling_banner_dMKFch": {
+      "type": "scrolling-banner",
+      "name": "Scrolling Banner",
+      "settings": {
+        "message": "SAVE 50% ON ALL SEED PACKETS - Discount taken in cart",
+        "speed": 35,
+        "outer_padding": 26,
+        "font_size": 25,
+        "background": "#f4912b",
+        "text_color": "#000000"
+      }
+    },
+    "homepage_custom_packets_9zetGm": {
+      "type": "homepage-custom-packets",
+      "name": "Homepage Custom Packets",
+      "settings": {
+        "highlighted_heading": "Custom",
+        "heading": "Seed Packets",
+        "body_text": "<p>Create personalized seed packets for weddings, events, promotions, and special occasions.</p>",
+        "button_text": "Shop Custom Packets",
+        "button_link": "shopify://collections/personalized-custom-seed-packets"
+      }
+    },
+    "pinned_grow_7QUgAV": {
+      "type": "pinned-grow",
+      "name": "Pinned scrolling images",
+      "settings": {
+        "heading": "Grow With Us",
+        "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+        "button_text": "Shop now",
+        "button_link": "",
+        "image_one": "shopify://shop_images/3-gen.webp",
+        "image_two": "shopify://shop_images/bentley-family-26.webp",
+        "image_three": "shopify://shop_images/bentley-children.webp",
+        "image_width": 450,
+        "background_color": "#f8f9f6",
+        "text_color": "#202020",
+        "button_background": "#f4912b",
+        "button_text_color": "#000000"
+      }
+    },
+    "homepage_grow_KcdKeH": {
+      "type": "homepage-grow",
+      "disabled": true,
+      "name": "Homepage Grow",
+      "settings": {
+        "left_image": "shopify://shop_images/BentleyFamilySquare.jpg",
+        "highlighted_heading": "Grow",
+        "heading": "With Us",
+        "body_text": "<p>We are a third generation family company Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </p>",
+        "button_text": "Learn More",
+        "button_link": "shopify://pages/about-bentley-seed-company-we-grow-good-things"
+      }
+    },
+    "seed_finder_JCLGm6": {
+      "type": "seed-finder",
+      "blocks": {
+        "collection_filter_XaEkBd": {
+          "type": "collection_filter",
+          "settings": {
+            "collection": "",
+            "label": ""
+          }
+        },
+        "collection_filter_whbeUd": {
+          "type": "collection_filter",
+          "settings": {
+            "collection": "heirloom-vegetable-seeds",
+            "label": ""
+          }
+        },
+        "collection_filter_7eMRRP": {
+          "type": "collection_filter",
+          "settings": {
+            "collection": "herb-seeds",
+            "label": ""
+          }
+        },
+        "collection_filter_QnmBpm": {
+          "type": "collection_filter",
+          "settings": {
+            "collection": "flower-seeds-for-sale",
+            "label": ""
+          }
+        },
+        "collection_filter_cahcjY": {
+          "type": "collection_filter",
+          "settings": {
+            "collection": "cold-weather-crop-seed-packets",
+            "label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_filter_XaEkBd",
+        "collection_filter_whbeUd",
+        "collection_filter_7eMRRP",
+        "collection_filter_QnmBpm",
+        "collection_filter_cahcjY"
+      ],
+      "name": "Seed finder",
+      "settings": {
+        "heading": "<strong>Seed</strong> Finder",
+        "description": "<p>Not sure what to you need?  Select a type below to explore!</p>",
+        "initial_message": "Select a category to view products.",
+        "loading_message": "Loading products...",
+        "empty_message": "No products were found in the selected categories.",
+        "load_more_label": "Load more",
+        "text_alignment": "left",
+        "filter_alignment": "left",
+        "image_ratio": "1 / 1",
+        "image_fit": "cover",
+        "grid_gap": 24,
+        "mobile_grid_gap": 12,
+        "background_color": "#f8f9f6",
+        "text_color": "#202020",
+        "accent_color": "#496a3a",
+        "border_color": "#202020",
+        "button_background_color": "#f4912b",
+        "button_text_color": "#000000",
+        "button_border_radius": 10,
+        "page_width": 1400,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40
+      }
+    },
+    "homepage_occasion_fjdgNK": {
+      "type": "homepage-occasion",
+      "blocks": {
+        "occasion_UwbnUw": {
+          "type": "occasion",
+          "settings": {
+            "collection": "wedding-seed-packets",
+            "title": "Wedding",
+            "image": "shopify://shop_images/wedding.webp"
+          }
+        },
+        "occasion_baAKP4": {
+          "type": "occasion",
+          "settings": {
+            "collection": "baby-shower-seed-favors",
+            "title": "Baby",
+            "image": "shopify://shop_images/baby.webp"
+          }
+        },
+        "occasion_D39JiM": {
+          "type": "occasion",
+          "settings": {
+            "collection": "seed-packets-for-memorials-and-funerals-1",
+            "title": "Memorial",
+            "image": "shopify://shop_images/memorial.webp"
+          }
+        },
+        "occasion_tPRMpK": {
+          "type": "occasion",
+          "settings": {
+            "collection": "seasonal-seed-packets",
+            "title": "Seasonal",
+            "image": "shopify://shop_images/fall.webp"
+          }
+        },
+        "occasion_te6eYE": {
+          "type": "occasion",
+          "settings": {
+            "collection": "pollinator-environmental-seed-packets",
+            "title": "Pollinator",
+            "image": "shopify://shop_images/pollinator.webp"
+          }
+        }
+      },
+      "block_order": [
+        "occasion_UwbnUw",
+        "occasion_baAKP4",
+        "occasion_D39JiM",
+        "occasion_tPRMpK",
+        "occasion_te6eYE"
+      ],
+      "name": "Homepage Occasion",
+      "settings": {}
+    }
+  },
+  "order": [
+    "peristent_icons_slider_KYdW3H",
+    "scrolling_banner_dMKFch",
+    "homepage_custom_packets_9zetGm",
+    "pinned_grow_7QUgAV",
+    "homepage_grow_KcdKeH",
+    "seed_finder_JCLGm6",
+    "homepage_occasion_fjdgNK"
+  ]
+}

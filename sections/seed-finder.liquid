@@ -1,0 +1,1283 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<section
+  id="SeedFinder-{{ section.id }}"
+  class="seed-finder"
+  data-seed-finder
+  data-results-section="seed-finder-results"
+>
+  <div class="seed-finder__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="seed-finder__heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.description != blank %}
+      <div class="seed-finder__description rte">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <fieldset class="seed-finder__filters">
+        <legend class="visually-hidden">Select a seed category</legend>
+
+        {% assign default_collection_assigned = false %}
+
+        {% for block in section.blocks %}
+          {% liquid
+            assign filter_collection = block.settings.collection
+            assign filter_label = block.settings.label
+
+            if filter_label == blank and filter_collection != blank
+              assign filter_label = filter_collection.title
+            endif
+          %}
+
+          {% if filter_collection != blank %}
+            {% liquid
+              assign is_default_filter = false
+
+              unless default_collection_assigned
+                assign is_default_filter = true
+                assign default_collection_assigned = true
+              endunless
+            %}
+
+            <label
+              class="seed-finder__filter"
+              {{ block.shopify_attributes }}
+            >
+              <input
+                class="seed-finder__checkbox"
+                type="checkbox"
+                value="{{ filter_collection.handle }}"
+                data-seed-filter
+                data-collection-title="{{ filter_collection.title | escape }}"
+                {% if is_default_filter %}
+                  data-default-filter
+                  checked
+                {% endif %}
+              >
+
+              <span
+                class="seed-finder__custom-checkbox"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 16 16"
+                  focusable="false"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 8.5 6.5 12 13 4.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </span>
+
+              <span class="seed-finder__filter-label">
+                {{ filter_label }}
+              </span>
+            </label>
+          {% endif %}
+        {% endfor %}
+      </fieldset>
+
+      <div
+        class="seed-finder__status"
+        data-seed-status
+        aria-live="polite"
+      >
+        {{ section.settings.initial_message }}
+      </div>
+
+      <div
+        class="seed-finder__loading"
+        data-seed-loading
+        aria-live="polite"
+        hidden
+      >
+        {{ section.settings.loading_message }}
+      </div>
+
+      <div
+        class="seed-finder__grid"
+        data-seed-grid
+      ></div>
+
+      <div
+        class="seed-finder__empty"
+        data-seed-empty
+        hidden
+      >
+        {{ section.settings.empty_message }}
+      </div>
+
+      <div class="seed-finder__load-more-wrapper">
+        <button
+          class="seed-finder__load-more"
+          type="button"
+          data-seed-load-more
+          hidden
+        >
+          {{ section.settings.load_more_label }}
+        </button>
+      </div>
+    {% else %}
+      <p>Add collection blocks to configure the seed finder.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% style %}
+    #SeedFinder-{{ section.id }} {
+      --seed-finder-background: {{ section.settings.background_color }};
+      --seed-finder-text: {{ section.settings.text_color }};
+      --seed-finder-accent: {{ section.settings.accent_color }};
+      --seed-finder-border: {{ section.settings.border_color }};
+      --seed-finder-gap: {{ section.settings.grid_gap }}px;
+
+      padding:
+        {{ section.settings.padding_top }}px
+        0
+        {{ section.settings.padding_bottom }}px;
+
+      color: var(--seed-finder-text);
+      background: var(--seed-finder-background);
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__inner {
+      width: min(
+        calc(100% - 32px),
+        {{ section.settings.page_width }}px
+      );
+      /* width:100%; */
+      margin: 0 auto;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__heading {
+      margin: 0 0 12px;
+      text-align: {{ section.settings.text_alignment }};
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.1;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__description {
+      max-width: 760px;
+      margin:
+        0
+        {% if section.settings.text_alignment == 'center' %}
+          auto
+        {% else %}
+          0
+        {% endif %}
+        32px;
+
+      text-align: {{ section.settings.text_alignment }};
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content:
+        {% if section.settings.filter_alignment == 'center' %}
+          center
+        {% else %}
+          flex-start
+        {% endif %};
+
+      gap: 12px 24px;
+      padding: 0;
+      margin: 0 0 32px;
+      border: 0;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__checkbox {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__custom-checkbox {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      color: #ffffff;
+      background: transparent;
+      border: 2px solid var(--seed-finder-border);
+      border-radius: 3px;
+    }
+
+    #SeedFinder-{{ section.id }}
+      .seed-finder__custom-checkbox svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+    }
+
+    #SeedFinder-{{ section.id }}
+      .seed-finder__checkbox:checked
+      + .seed-finder__custom-checkbox {
+      background: var(--seed-finder-accent);
+      border-color: var(--seed-finder-accent);
+    }
+
+    #SeedFinder-{{ section.id }}
+      .seed-finder__checkbox:checked
+      + .seed-finder__custom-checkbox
+      svg {
+      opacity: 1;
+    }
+
+    #SeedFinder-{{ section.id }}
+      .seed-finder__checkbox:focus-visible
+      + .seed-finder__custom-checkbox {
+      outline: 3px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__status,
+    #SeedFinder-{{ section.id }} .seed-finder__loading {
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--seed-finder-gap);
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__product-link {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      color: inherit;
+      text-decoration: none;
+      border:1px solid var(--black);
+      border-radius:10px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__image-wrapper {
+      position: relative;
+      overflow: hidden;
+      background: #f5f5f5;
+      aspect-ratio: {{ section.settings.image_ratio }};
+      border-top-left-radius:10px;
+      border-top-right-radius:10px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__image,
+    #SeedFinder-{{ section.id }} .seed-finder__placeholder {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__image {
+      object-fit: {{ section.settings.image_fit }};
+      transition: transform 0.3s ease;
+    }
+
+    #SeedFinder-{{ section.id }}
+      .seed-finder__product-link:hover
+      .seed-finder__image {
+      transform: scale(1.03);
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 6px 10px;
+      color: var(--seed-finder-background);
+      background: var(--seed-finder-text);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__product-content {
+      /* background:#F6F3DF; */
+      border-bottom-right-radius:10px;
+      border-bottom-left-radius:10px;
+      border-top:1px solid black;
+      /* border-top:1px solid var(--black); */
+    }
+
+    .product-content-item {
+      width:100%;
+      height:auto;
+      min-height:100px;
+    }
+
+    .product-content-item:nth-of-type(1) {
+      /* background:yellow; */
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:center;
+      padding:5%;
+    }
+
+    .product-content-item:nth-of-type(2) {
+      /* background:yellowgreen; */
+      /* border:1px solid orange; */
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:5%;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__product-title {
+      margin: 0 0 6px;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__product-title a {
+      color:var(--black);
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__price {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__compare-price {
+      opacity: 0.6;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__load-more-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__load-more {
+      min-width: 160px;
+      padding: 13px 24px;
+      color: {{ section.settings.button_text_color }};
+      background: {{ section.settings.button_background_color }};
+      border: 1px solid {{ section.settings.button_background_color }};
+      border-radius: {{ section.settings.button_border_radius }}px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__load-more:hover {
+      color: {{ section.settings.button_text_color }};
+      background: transparent;
+    }
+
+    #SeedFinder-{{ section.id }} [hidden] {
+      display: none !important;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__empty {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    #SeedFinder-{{ section.id }} .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media screen and (max-width: 749px) {
+      #SeedFinder-{{ section.id }} {
+        padding:
+          {{ section.settings.mobile_padding_top }}px
+          0
+          {{ section.settings.mobile_padding_bottom }}px;
+      }
+
+      #SeedFinder-{{ section.id }} .seed-finder__inner {
+        width: min(
+          calc(100% - 24px),
+          {{ section.settings.page_width }}px
+        );
+      }
+
+      #SeedFinder-{{ section.id }} .seed-finder__filters {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      #SeedFinder-{{ section.id }} .seed-finder__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: {{ section.settings.mobile_grid_gap }}px;
+      }
+
+      #SeedFinder-{{ section.id }} .seed-finder__product-title {
+        font-size: 15px;
+      }
+    }
+
+    .purchase-container {
+      width:100%;
+      height:auto;
+      /* background:yellow; */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    #SeedFinder-{{ section.id }} .seed-finder__purchase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    /* border:1px solid red; */
+    align-items:center;
+    justify-content:center;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__quantity {
+    display: flex;
+    align-items: stretch;
+    height: 44px;
+    border: 1px solid var(--seed-finder-border);
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__quantity-button {
+    width: 38px;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: 18px;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__quantity-input {
+    width: 44px;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid var(--seed-finder-border);
+    border-right: 1px solid var(--seed-finder-border);
+    text-align: center;
+    font: inherit;
+    appearance: textfield;
+  }
+
+  #SeedFinder-{{ section.id }}
+    .seed-finder__quantity-input::-webkit-inner-spin-button,
+  #SeedFinder-{{ section.id }}
+    .seed-finder__quantity-input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__add-to-cart {
+    flex: 1;
+    min-width: 130px;
+    min-height: 44px;
+    padding: 10px 18px;
+    color: {{ section.settings.button_text_color }};
+    background: {{ section.settings.button_background_color }};
+    border: 1px solid {{ section.settings.button_background_color }};
+    border-radius: {{ section.settings.button_border_radius }}px;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__add-to-cart:hover:not(:disabled) {
+    color: {{ section.settings.button_text_color }};
+    background: transparent;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__add-to-cart:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  #SeedFinder-{{ section.id }} .seed-finder__cart-message {
+    flex-basis: 100%;
+    /* min-height: 18px; */
+    font-size: 13px;
+  }
+{% endstyle %}
+
+<script>
+  (() => {
+    const section = document.getElementById('SeedFinder-{{ section.id }}');
+
+    if (!section || section.dataset.initialized === 'true') {
+      return;
+    }
+
+    section.dataset.initialized = 'true';
+
+    const checkboxes = Array.from(section.querySelectorAll('[data-seed-filter]'));
+
+    const defaultCheckbox = section.querySelector('[data-default-filter]');
+
+    const grid = section.querySelector('[data-seed-grid]');
+
+    const loadMoreButton = section.querySelector('[data-seed-load-more]');
+
+    const statusElement = section.querySelector('[data-seed-status]');
+
+    const loadingElement = section.querySelector('[data-seed-loading]');
+
+    const emptyElement = section.querySelector('[data-seed-empty]');
+
+    const resultsSectionId = section.dataset.resultsSection || 'seed-finder-results';
+
+    let activeCollectionHandle = '';
+    let activeCollectionTitle = '';
+    let currentPage = 0;
+    let totalPages = 0;
+    let totalProducts = 0;
+    let requestController = null;
+
+    /**
+     * Returns Shopify's locale-aware root URL.
+     * This preserves language or market prefixes when present.
+     */
+    const getLocaleRoot = () => {
+      if (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) {
+        return window.Shopify.routes.root;
+      }
+
+      return '/';
+    };
+
+    /**
+     * Updates the loading indicator and accessibility state.
+     */
+    const setLoading = (isLoading) => {
+      if (loadingElement) {
+        loadingElement.hidden = !isLoading;
+      }
+
+      if (loadMoreButton) {
+        loadMoreButton.disabled = isLoading;
+      }
+
+      section.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+    };
+
+    /**
+     * Clears the current collection results.
+     */
+    const resetGrid = () => {
+      if (grid) {
+        grid.innerHTML = '';
+      }
+
+      currentPage = 0;
+      totalPages = 0;
+      totalProducts = 0;
+
+      if (loadMoreButton) {
+        loadMoreButton.hidden = true;
+      }
+
+      if (emptyElement) {
+        emptyElement.hidden = true;
+      }
+    };
+
+    /**
+     * Updates the visible product count.
+     */
+    const updateStatus = () => {
+      if (!statusElement || !grid) {
+        return;
+      }
+
+      const shownProducts = grid.querySelectorAll('[data-seed-product]').length;
+
+      if (!activeCollectionHandle) {
+        statusElement.textContent = '';
+        return;
+      }
+
+      if (totalProducts === 0) {
+        statusElement.textContent = '';
+        return;
+      }
+
+      statusElement.textContent = `Showing ${shownProducts} of ${totalProducts} products in ${activeCollectionTitle}`;
+    };
+
+    /**
+     * Shows Load More only when another page exists.
+     */
+    const updateLoadMoreButton = () => {
+      if (!loadMoreButton) {
+        return;
+      }
+
+      loadMoreButton.hidden = !(currentPage > 0 && currentPage < totalPages);
+    };
+
+    /**
+     * Builds the locale-aware collection section request.
+     */
+    const buildRequestUrl = (collectionHandle, page) => {
+      const root = getLocaleRoot();
+
+      const collectionPath = `${root}collections/${encodeURIComponent(collectionHandle)}`;
+
+      const parameters = new URLSearchParams({
+        page: String(page),
+        section_id: resultsSectionId,
+      });
+
+      return `${collectionPath}?${parameters.toString()}`;
+    };
+
+    /**
+     * Requests one page of products from Shopify.
+     */
+    const loadProducts = async ({ collectionHandle, collectionTitle, page = 1, append = false }) => {
+      if (!collectionHandle || !grid) {
+        return;
+      }
+
+      /*
+       * Cancel a previous request if the customer changes
+       * categories before it finishes.
+       */
+      if (requestController) {
+        requestController.abort();
+      }
+
+      const currentController = new AbortController();
+      requestController = currentController;
+
+      setLoading(true);
+
+      if (emptyElement) {
+        emptyElement.hidden = true;
+      }
+
+      try {
+        const response = await fetch(buildRequestUrl(collectionHandle, page), {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          signal: currentController.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Seed finder request failed with status ${response.status}.`);
+        }
+
+        const html = await response.text();
+
+        /*
+         * The response is an HTML fragment, so parse it into
+         * a temporary document before extracting the results.
+         */
+        const temporaryDocument = new DOMParser().parseFromString(html, 'text/html');
+
+        const results = temporaryDocument.querySelector('[data-seed-results]');
+
+        if (!results) {
+          throw new Error('The seed finder results markup was not found.');
+        }
+
+        /*
+         * Ignore a response if a newer request has replaced it.
+         */
+        if (requestController !== currentController) {
+          return;
+        }
+
+        activeCollectionHandle = collectionHandle;
+        activeCollectionTitle = collectionTitle;
+
+        currentPage = Number.parseInt(results.dataset.currentPage, 10) || page;
+
+        totalPages = Number.parseInt(results.dataset.totalPages, 10) || 0;
+
+        totalProducts = Number.parseInt(results.dataset.productCount, 10) || 0;
+
+        if (append) {
+          grid.insertAdjacentHTML('beforeend', results.innerHTML);
+        } else {
+          grid.innerHTML = results.innerHTML;
+        }
+
+        const renderedProductCount = grid.querySelectorAll('[data-seed-product]').length;
+
+        if (emptyElement) {
+          emptyElement.hidden = renderedProductCount !== 0;
+        }
+
+        updateStatus();
+        updateLoadMoreButton();
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          return;
+        }
+
+        console.error('Seed finder error:', error);
+
+        if (statusElement) {
+          statusElement.textContent = 'Products could not be loaded. Please try again.';
+        }
+
+        if (loadMoreButton) {
+          loadMoreButton.hidden = true;
+        }
+      } finally {
+        /*
+         * Only the newest request is allowed to remove
+         * the loading state.
+         */
+        if (requestController === currentController) {
+          requestController = null;
+          setLoading(false);
+        }
+      }
+    };
+
+    /**
+     * Loads the default collection.
+     */
+    const loadDefaultCollection = () => {
+      if (!defaultCheckbox) {
+        resetGrid();
+
+        if (statusElement) {
+          statusElement.textContent = 'Add at least one collection to the seed finder.';
+        }
+
+        return;
+      }
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = checkbox === defaultCheckbox;
+      });
+
+      resetGrid();
+
+      loadProducts({
+        collectionHandle: defaultCheckbox.value,
+        collectionTitle: defaultCheckbox.dataset.collectionTitle || '',
+        page: 1,
+        append: false,
+      });
+    };
+
+    const updateCartCount = (count) => {
+      const possibleCartCountElements = [
+        document.querySelector('[data-cart-count]'),
+        document.querySelector('.cart-count'),
+        document.querySelector('.cart-count-bubble'),
+        document.querySelector('#cart-count'),
+        document.querySelector('[data-cart-count-bubble]'),
+      ].filter(Boolean);
+
+      possibleCartCountElements.forEach((element) => {
+        element.textContent = count;
+
+        if (count > 0) {
+          element.removeAttribute('hidden');
+        } else {
+          element.setAttribute('hidden', '');
+        }
+      });
+    };
+
+    section.addEventListener('click', async (event) => {
+      const minusButton = event.target.closest('[data-quantity-minus]');
+      const plusButton = event.target.closest('[data-quantity-plus]');
+      const addButton = event.target.closest('[data-seed-add-to-cart]');
+
+      /**
+       * Quantity -
+       */
+      if (minusButton) {
+        const purchase = minusButton.closest('[data-seed-purchase]');
+        const input = purchase?.querySelector('[data-quantity-input]');
+
+        if (!input) return;
+
+        const currentValue = Number.parseInt(input.value, 10) || 1;
+
+        input.value = Math.max(1, currentValue - 1);
+
+        return;
+      }
+
+      /**
+       * Quantity +
+       */
+      if (plusButton) {
+        const purchase = plusButton.closest('[data-seed-purchase]');
+        const input = purchase?.querySelector('[data-quantity-input]');
+
+        if (!input) return;
+
+        const currentValue = Number.parseInt(input.value, 10) || 1;
+
+        input.value = currentValue + 1;
+
+        return;
+      }
+
+      /**
+       * Add to cart
+       */
+      if (addButton) {
+        const purchase = addButton.closest('[data-seed-purchase]');
+
+        if (!purchase) return;
+
+        const variantId = purchase.dataset.variantId;
+
+        const quantityInput = purchase.querySelector('[data-quantity-input]');
+
+        const message = purchase.querySelector('[data-seed-cart-message]');
+
+        const quantity = Math.max(1, Number.parseInt(quantityInput?.value, 10) || 1);
+
+        if (!variantId) {
+          return;
+        }
+
+        addButton.disabled = true;
+        addButton.textContent = 'Adding...';
+
+        if (message) {
+          message.textContent = '';
+        }
+
+        try {
+          const root = window.Shopify?.routes?.root || '/';
+
+          const response = await fetch(`${root}cart/add.js`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              items: [
+                {
+                  id: Number(variantId),
+                  quantity: quantity,
+                },
+              ],
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.description || result.message || 'Unable to add product.');
+          }
+
+          const cartResponse = await fetch(`${root}cart.js`, {
+            headers: {
+              Accept: 'application/json',
+            },
+          });
+
+          const cart = await cartResponse.json();
+
+          updateCartCount(cart.item_count);
+
+          addButton.textContent = 'Added';
+
+          if (message) {
+            message.textContent = `${quantity} added to your cart.`;
+          }
+
+          window.setTimeout(() => {
+            addButton.textContent = 'Add to cart';
+          }, 1500);
+        } catch (error) {
+          console.error('Seed finder cart error:', error);
+
+          addButton.textContent = 'Add to cart';
+
+          if (message) {
+            message.textContent = error.message || 'Unable to add this product.';
+          }
+        } finally {
+          addButton.disabled = false;
+        }
+      }
+    });
+
+    /**
+     * Collection selection behavior.
+     */
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        /*
+         * When the active checkbox is unchecked,
+         * restore the default collection.
+         */
+        if (!checkbox.checked) {
+          loadDefaultCollection();
+          return;
+        }
+
+        /*
+         * Keep the checkbox appearance while allowing only
+         * one active collection.
+         */
+        checkboxes.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.checked = false;
+          }
+        });
+
+        resetGrid();
+
+        loadProducts({
+          collectionHandle: checkbox.value,
+          collectionTitle: checkbox.dataset.collectionTitle || '',
+          page: 1,
+          append: false,
+        });
+      });
+    });
+
+    /**
+     * Request the next page of the active collection.
+     */
+    if (loadMoreButton) {
+      loadMoreButton.addEventListener('click', () => {
+        if (!activeCollectionHandle || currentPage >= totalPages) {
+          return;
+        }
+
+        loadProducts({
+          collectionHandle: activeCollectionHandle,
+          collectionTitle: activeCollectionTitle,
+          page: currentPage + 1,
+          append: true,
+        });
+      });
+    }
+
+    /*
+     * Initial page load.
+     */
+    loadDefaultCollection();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Seed finder",
+  "tag": "section",
+  "class": "seed-finder-section",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find your seeds"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Select a category to view its products.</p>"
+    },
+    {
+      "type": "text",
+      "id": "initial_message",
+      "label": "Initial message",
+      "default": "Select a category to view products."
+    },
+    {
+      "type": "text",
+      "id": "loading_message",
+      "label": "Loading message",
+      "default": "Loading products..."
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "Empty collection message",
+      "default": "No products were found in this category."
+    },
+    {
+      "type": "text",
+      "id": "load_more_label",
+      "label": "Load more label",
+      "default": "Load more"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "filter_alignment",
+      "label": "Filter alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Crop to fill"
+        },
+        {
+          "value": "contain",
+          "label": "Fit entire image"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop grid spacing",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_grid_gap",
+      "min": 6,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile grid spacing",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Checkbox accent",
+      "default": "#496a3a"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Checkbox border",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background",
+      "default": "#202020"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button corner radius",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum page width",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop top padding",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop bottom padding",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_filter",
+      "name": "Seed category",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Checkbox label",
+          "info": "Leave blank to use the collection title."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seed finder",
+      "blocks": [
+        {
+          "type": "collection_filter"
+        },
+        {
+          "type": "collection_filter"
+        },
+        {
+          "type": "collection_filter"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
