@@ -11,6 +11,38 @@
   <h1>{{ blog.title }}</h1>
 </div>
 
+<div class="blog-filter-container">
+  <div class="blog-topic-select">
+    <label for="BlogTopicSelect" class="blog-topic-select__label"> Browse by topic </label>
+
+    <select
+      id="BlogTopicSelect"
+      class="blog-topic-select__select"
+      onchange="if (this.value) window.location.href = this.value;"
+    >
+      <option
+        value="{{ blog.url }}"
+        {% if current_tags == blank %}
+          selected
+        {% endif %}
+      >
+        {{ 'blogs.all_articles' | t }}
+      </option>
+
+      {% for tag in blog.all_tags %}
+        <option
+          value="{{ blog.url }}/tagged/{{ tag | handle }}"
+          {% if current_tags contains tag %}
+            selected
+          {% endif %}
+        >
+          {{ tag }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
 {% paginate blog.articles by 8 %}
   <div class="blog-container">
     {% for article in blog.articles %}
@@ -79,105 +111,149 @@
   {% endif %}
 {% endpaginate %}
 {% style %}
-  .blog-pagination {
+    .blog-pagination {
+      width: 100%;
+      margin-top: 2.5em;
+    }
+
+    .blog-title-container {
+      width: 100%;
+      height: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 2.5% 0;
+    }
+
+    .blog-container {
+      width: 100%;
+      height: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
+    }
+
+    .article-container {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--black);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-wrapper {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-bottom: 1px solid black;
+      max-height: 30vh;
+    }
+
+    .image-wrapper a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .image-wrapper img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .info-wrapper {
+      width: 100%;
+      height: 100%;
+      padding: 1.5em;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .article-title {
+      margin: 0 0 0.75em;
+    }
+
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em 1em;
+      margin-bottom: 1em;
+      font-size: 0.9rem;
+    }
+
+    .article-excerpt {
+      margin-bottom: 1.5em;
+      line-height: 1.5;
+    }
+
+    .article-read-more {
+      margin-top: auto;
+      align-self: flex-start;
+    }
+
+    @media screen and (max-width: 990px) {
+      .blog-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .blog-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-topic-select {
     width: 100%;
-    margin-top: 2.5em;
+    max-width: 400px;
   }
 
-  .blog-title-container {
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 2.5% 0;
+  .blog-filter-container {
+    width:100%;
+    height:auto;
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-start;
+    margin-bottom:2.5%;
   }
 
-  .blog-container {
-    width: 100%;
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1em;
+  .blog-filter-wrapper {
+    width:var(--inner-width);
+    border:2px solid red;
   }
 
-  .article-container {
+  .blog-topic-select__label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .blog-topic-select__select {
     width: 100%;
-    height: 100%;
+    padding: 2.5% 10%;
     border: 1px solid var(--black);
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    background-color: rgba(var(--background-color), 1);
+    color: rgba(var(--colors-text), 1);
+    font: inherit;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
-  .image-wrapper {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border-bottom: 1px solid black;
-    max-height: 30vh;
+  {% if settings.edges_type == 'rounded_corners' %}
+  .blog-topic-select__select {
+    border-radius: 6px;
   }
-
-  .image-wrapper a {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .image-wrapper img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .info-wrapper {
-    width: 100%;
-    height: 100%;
-    padding: 1.5em;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
-  .article-title {
-    margin: 0 0 0.75em;
-  }
-
-  .article-title a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .article-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em 1em;
-    margin-bottom: 1em;
-    font-size: 0.9rem;
-  }
-
-  .article-excerpt {
-    margin-bottom: 1.5em;
-    line-height: 1.5;
-  }
-
-  .article-read-more {
-    margin-top: auto;
-    align-self: flex-start;
-  }
-
-  @media screen and (max-width: 990px) {
-    .blog-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .blog-container {
-      grid-template-columns: 1fr;
-    }
-  }
+  {% endif %}
 {% endstyle %}
 
 {% schema %}

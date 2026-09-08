@@ -9,21 +9,21 @@
 
 <div class="err-container full-width">
   <div class="err-section">
-    <h1>{{ '404.title' | t }}</h1>
+    <h1 class="err-header">{{ '404.title' | t }}</h1>
   </div>
   <div class="err-section marquee">
     <div class="marquee-track">
       <div class="marquee-group">
-        <h2>Looks Like This Page Is Still Growing.</h2>
+        <h2>Looks Like This Page Is Still <span class="growing">Growing</span></h2>
       </div>
     </div>
   </div>
   <div class="err-section full-width">
     <div class="lower-err-section">
-      <a href="/" class="err-btn">Return To Homepage</a>
+      <a href="/" class="main-btn">Return To Homepage</a>
     </div>
     <div class="lower-err-section">
-      <a href="/collections/sale" class="err-btn">See What's On Sale</a>
+      <a href="/collections/sale" class="main-btn">See What's On Sale</a>
     </div>
   </div>
   <div class="err-section"></div>
@@ -68,13 +68,14 @@
   }
 
   .err-section:nth-of-type(1) {
-    background: var(--orange);
+    /* background: var(--black); */
+
     color: var(--black);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* border-bottom: 1px solid var(--black); */
+    border-bottom: 1px solid var(--black);
     padding: 5% 0;
   }
 
@@ -106,6 +107,8 @@
     align-items: center;
     justify-content: center;
     gap: 1em;
+    width: 90%;
+    margin-bottom: 1em;
   }
 
   .lower-err-section {
@@ -114,8 +117,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50vh;
-    background: var(--black);
+    height: auto;
+    padding: 10% 0;
+    border: 1px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    /* background: var(--orange); */
+    border-radius: 10px;
   }
 
   .lower-err-section a {
@@ -124,13 +131,15 @@
 
   .err-section:nth-of-type(4) {
     height: 25px;
-    background: var(--orange);
+    background: var(--black);
   }
 
   .err-section h1 {
     font-size: clamp(5em, 15vw, 15em);
-    -webkit-text-stroke: 3px var(--black);
-    color: var(--orange);
+    background: var(--black);
+    padding: 2% 15%;
+    border-radius: 10px;
+    color: var(--off-white);
   }
 
   .err-section h2 {
@@ -168,6 +177,19 @@
     duration: duration,
     ease: 'none',
     repeat: -1,
+  });
+
+  gsap.to('.err-header', {
+    scale: 1.05,
+    duration: 1.5,
+    yoyo: true,
+    repeat: -1,
+  });
+
+  gsap.from('.err-header', {
+    yPercent: 40,
+    opacity: 0,
+    duration: 1.25,
   });
 {% endjavascript %}
 
