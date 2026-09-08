@@ -45,7 +45,7 @@
     background: var(--orange);
     border: 1px solid var(--black);
     text-decoration: none;
-    border-radius: 25px;
+    border-radius: 10px;
     font-size: 1.2em;
     max-width: 400px;
 }

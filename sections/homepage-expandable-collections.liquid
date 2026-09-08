@@ -2,13 +2,40 @@
 
 %}
 
-{% style %}
+{% stylesheet %}
   .section-{{ section.id }} {
 
   }
-{% endstyle %}
+  .expandable-container {
+    width:100%;
+    height:auto;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    min-height:50vh;
+  }
 
-<section class="section-{{ section.id }}">
+  .expandable-wrapper {
+    width:var(--inner-width);
+    height:40vh;
+    background:white;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap:2em;
+  }
+
+  .expandable-item {
+    width:100%;
+    height:auto;
+    display:block;
+    height:40vh;
+    background:yellow;
+    border-radius:var(--radius);
+  }
+{% endstylesheet %}
+
+<section class="section-{{ section.id }} full-width">
   <div class="expandable-container">
     <div class="expandable-wrapper">
       <div class="expandable-item"></div>

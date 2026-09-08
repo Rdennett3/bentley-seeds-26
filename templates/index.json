@@ -252,6 +252,11 @@
       ],
       "name": "Homepage Occasion",
       "settings": {}
+    },
+    "homepage_expandable_collections_pDhCGm": {
+      "type": "homepage-expandable-collections",
+      "name": "Expandable Collections",
+      "settings": {}
     }
   },
   "order": [
@@ -261,6 +266,7 @@
     "pinned_grow_7QUgAV",
     "homepage_grow_KcdKeH",
     "seed_finder_JCLGm6",
-    "homepage_occasion_fjdgNK"
+    "homepage_occasion_fjdgNK",
+    "homepage_expandable_collections_pDhCGm"
   ]
 }
