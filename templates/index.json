@@ -94,6 +94,11 @@
         "button_link": "shopify://collections/personalized-custom-seed-packets"
       }
     },
+    "homepage_expandable_collections_pDhCGm": {
+      "type": "homepage-expandable-collections",
+      "name": "Expandable Collections",
+      "settings": {}
+    },
     "pinned_grow_7QUgAV": {
       "type": "pinned-grow",
       "name": "Pinned scrolling images",
@@ -252,21 +257,16 @@
       ],
       "name": "Homepage Occasion",
       "settings": {}
-    },
-    "homepage_expandable_collections_pDhCGm": {
-      "type": "homepage-expandable-collections",
-      "name": "Expandable Collections",
-      "settings": {}
     }
   },
   "order": [
     "peristent_icons_slider_KYdW3H",
     "scrolling_banner_dMKFch",
     "homepage_custom_packets_9zetGm",
+    "homepage_expandable_collections_pDhCGm",
     "pinned_grow_7QUgAV",
     "homepage_grow_KcdKeH",
     "seed_finder_JCLGm6",
-    "homepage_occasion_fjdgNK",
-    "homepage_expandable_collections_pDhCGm"
+    "homepage_occasion_fjdgNK"
   ]
 }

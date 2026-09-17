@@ -8,7 +8,6 @@
 <div class="intro-container full-width">
   <div class="intro-wrapper">
     <h1>{{ collection.title }}</h1>
-    <p>{{ collection.description }}</p>
   </div>
 </div>
 
@@ -210,7 +209,7 @@
   </div>
 </div>
 
-{% paginate collection.products by 8 %}
+{% paginate collection.products by 16 %}
   <div class="collection-products full-width">
     <div class="collection-products-wrapper">
       {% for product in collection.products %}
@@ -499,10 +498,10 @@
     gap: 1em;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 2.5% 0;
-    border: 1px solid var(--black);
+    padding: 2.5% 0 0 0;
+    /* border: 1px solid var(--black); */
     border-radius: 10px;
-    padding-left: 5%;
+    /* padding-left: 5%; */
   }
 
   .intro-wrapper h1 {

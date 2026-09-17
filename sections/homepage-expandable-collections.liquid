@@ -2,45 +2,72 @@
 
 %}
 
-{% stylesheet %}
-  .section-{{ section.id }} {
+{{ 'variables.css' | asset_url | stylesheet_tag }}
 
+{% style %}
+  .section-{{ section.id }} {
+    /* display:none; */
   }
   .expandable-container {
     width:100%;
     height:auto;
-    background:white;
+    background:var(--off-white);
     display:flex;
     align-items:center;
     justify-content: center;
-    min-height:50vh;
+    min-height:70vh;
+    margin-bottom:10%;
   }
 
   .expandable-wrapper {
     width:var(--inner-width);
-    height:40vh;
-    background:white;
+    height:60vh;
+    background:var(--off-white);
+    display:flex;
+    flex-direction:column;
+  }
+
+  .expandable-section:nth-of-type(1) {
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding:2.5% 0;
+  }
+
+  .expandable-section:nth-of-type(1) h2 {
+    font-size:3em;
+  }
+
+  .expandable-section:nth-of-type(2) {
     display:grid;
     grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-    gap:2em;
+    gap:.5em;
   }
 
   .expandable-item {
     width:100%;
     height:auto;
-    display:block;
-    height:40vh;
-    background:yellow;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:60vh;
+    background:red;
     border-radius:var(--radius);
+    font-size:3em;
   }
-{% endstylesheet %}
+{% endstyle %}
 
 <section class="section-{{ section.id }} full-width">
   <div class="expandable-container">
     <div class="expandable-wrapper">
-      <div class="expandable-item"></div>
-      <div class="expandable-item"></div>
-      <div class="expandable-item"></div>
+      <div class="expandable-section">
+        <h2><strong>Shop</strong> Collections</h2>
+      </div>
+      <div class="expandable-section">
+        <div class="expandable-item">1</div>
+        <div class="expandable-item">2</div>
+        <div class="expandable-item">3</div>
+      </div>
     </div>
   </div>
 </section>
