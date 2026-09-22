@@ -315,49 +315,168 @@
                 </div>
 
                 {% if link.links != blank %}
-                  <div
-                    class="mega-header__mega-menu"
-                    data-mega-menu
-                  >
-                    <div class="mega-header__mega-container">
-                      <div class="mega-header__mega-heading">
-                        <a href="{{ link.url }}">
-                          {{ link.title | escape }}
-                        </a>
-                      </div>
+                  {% if link.links != blank %}
+                    <div
+                      class="mega-header__mega-menu"
+                      data-mega-menu
+                    >
+                      <div class="mega-header__mega-container">
+                        <div class="mega-header__mega-heading">
+                          <a href="{{ link.url }}">
+                            {{ link.title | escape }}
+                          </a>
+                        </div>
 
-                      <div class="mega-header__mega-columns">
-                        {% for child_link in link.links %}
-                          <div class="mega-header__mega-column">
-                            <a
-                              class="mega-header__child-heading"
-                              href="{{ child_link.url }}"
-                            >
-                              {{ child_link.title | escape }}
-                            </a>
+                        <div class="mega-header__mega-layout">
+                          {%- comment -%}
+                            LEFT COLUMN
+                            Second-level navigation
+                          {%- endcomment -%}
 
-                            {% if child_link.links != blank %}
-                              <ul
-                                class="mega-header__grandchild-list"
-                                role="list"
+                          <div
+                            class="mega-header__mega-sidebar"
+                            data-mega-sidebar
+                          >
+                            {% for child_link in link.links %}
+                              <a
+                                href="{{ child_link.url }}"
+                                class="
+                                  mega-header__mega-sidebar-link
+                                  {% if forloop.first %}is-active{% endif %}
+                                "
+                                data-mega-sidebar-link
+                                data-mega-target="MegaPanel-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"
                               >
-                                {% for grandchild_link in child_link.links %}
-                                  <li>
-                                    <a
-                                      class="mega-header__grandchild-link"
-                                      href="{{ grandchild_link.url }}"
-                                    >
-                                      {{ grandchild_link.title | escape }}
-                                    </a>
-                                  </li>
-                                {% endfor %}
-                              </ul>
-                            {% endif %}
+                                <span>
+                                  {{ child_link.title | escape }}
+                                </span>
+
+                                {% if child_link.links != blank %}
+                                  <svg
+                                    class="mega-header__mega-sidebar-arrow"
+                                    aria-hidden="true"
+                                    viewBox="0 0 8 12"
+                                    width="8"
+                                    height="12"
+                                  >
+                                    <path
+                                      d="m1 1 5 5-5 5"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.5"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                  </svg>
+                                {% endif %}
+                              </a>
+                            {% endfor %}
                           </div>
-                        {% endfor %}
+
+                          {%- comment -%}
+                            RIGHT COLUMN
+                            Third-level navigation
+                          {%- endcomment -%}
+
+                          <div class="mega-header__mega-content">
+                            {% for child_link in link.links %}
+                              <div
+                                id="MegaPanel-{{ section.id }}-{{ forloop.parentloop.index }}-{{ forloop.index }}"
+                                class="
+                                  mega-header__mega-panel
+                                  {% if forloop.first %}is-active{% endif %}
+                                "
+                                data-mega-panel
+                              >
+                                <div class="mega-header__mega-panel-header">
+                                  <a href="{{ child_link.url }}">
+                                    {{ child_link.title | escape }}
+                                  </a>
+                                </div>
+
+                                {% if child_link.type == 'collection_link' and child_link.object != blank %}
+                                  {% assign menu_collection = child_link.object %}
+
+                                  <div class="mega-header__mega-products">
+                                    {% for product in menu_collection.products limit: 30 %}
+                                      <a
+                                        class="mega-header__mega-product-link"
+                                        href="{{ product.url }}"
+                                      >
+                                        {{ product.title | escape }}
+                                      </a>
+                                    {% endfor %}
+                                  </div>
+
+                                  <div class="mega-header__mega-view-all-wrapper">
+                                    <a
+                                      class="mega-header__mega-view-all"
+                                      href="{{ menu_collection.url }}"
+                                    >
+                                      View All {{ menu_collection.title | escape }}
+                                    </a>
+                                  </div>
+
+                                {% else %}
+                                  <a
+                                    class="mega-header__mega-view-all"
+                                    href="{{ child_link.url }}"
+                                  >
+                                    View {{ child_link.title | escape }}
+                                  </a>
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  {% endif %}
+                  {% comment %}
+                    <div
+                      class="mega-header__mega-menu"
+                      data-mega-menu
+                    >
+                      <div class="mega-header__mega-container">
+                        <div class="mega-header__mega-heading">
+                          <a href="{{ link.url }}">
+                            {{ link.title | escape }}
+                          </a>
+                        </div>
+
+                        <div class="mega-header__mega-columns">
+                          {% for child_link in link.links %}
+                            <div class="mega-header__mega-column">
+                              <a
+                                class="mega-header__child-heading"
+                                href="{{ child_link.url }}"
+                              >
+                                {{ child_link.title | escape }}
+                              </a>
+
+                              {% if child_link.links != blank %}
+                                <ul
+                                  class="mega-header__grandchild-list"
+                                  role="list"
+                                >
+                                  {% for grandchild_link in child_link.links %}
+                                    <li>
+                                      <a
+                                        class="mega-header__grandchild-link"
+                                        href="{{ grandchild_link.url }}"
+                                      >
+                                        {{ grandchild_link.title | escape }}
+                                      </a>
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                            </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endcomment %}
                 {% endif %}
               </li>
             {% endfor %}
@@ -563,617 +682,219 @@
 </header>
 
 {% style %}
-    .custom-mega-header-section {
-      position: relative !important;
+      .custom-mega-header-section {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+      }
+
+     #shopify-section-{{ section.id }} {
+      position: sticky !important;
+      top: 0;
+      left: auto;
       display: block !important;
       width: 100% !important;
       height: auto !important;
+      z-index: 1000;
+      background: #f8f9f6;
     }
 
-   #shopify-section-{{ section.id }} {
-    position: sticky !important;
-    top: 0;
-    left: auto;
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    z-index: 1000;
-    background: #f8f9f6;
-  }
-
-    #MegaHeader-{{ section.id }} {
-      position: relative;
-      display: block !important;
-      width: 100% !important;
-      height: auto !important;
-      flex-direction: initial !important;
-      align-items: initial !important;
-      justify-content: initial !important;
-    }
-        #MegaHeader-{{ section.id }} .mega-header__utility,
-        #MegaHeader-{{ section.id }} .mega-header__main {
-          display: block !important;
-          width: 100% !important;
-          clear: both;
-        }
-
-        #MegaHeader-{{ section.id }} .mega-header__utility-container {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: flex-end !important;
+      #MegaHeader-{{ section.id }} {
+        position: relative;
+        display: block !important;
         width: 100% !important;
+        height: auto !important;
+        flex-direction: initial !important;
+        align-items: initial !important;
+        justify-content: initial !important;
       }
-
-      #MegaHeader-{{ section.id }} .mega-header__main-container {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-      }
-
-          #MegaHeader-{{ section.id }} *,
-          #MegaHeader-{{ section.id }} *::before,
-          #MegaHeader-{{ section.id }} *::after {
-            box-sizing: border-box;
+          #MegaHeader-{{ section.id }} .mega-header__utility,
+          #MegaHeader-{{ section.id }} .mega-header__main {
+            display: block !important;
+            width: 100% !important;
+            clear: both;
           }
-
-          #MegaHeader-{{ section.id }} {
-            position: relative;
-            width: 100%;
-            background: var(--header-background);
-            color: var(--header-text);
-          }
-
-          #MegaHeader-{{ section.id }} a {
-            color: inherit;
-            text-decoration: none;
-          }
-
-          #MegaHeader-{{ section.id }} button,
-          #MegaHeader-{{ section.id }} input {
-            font: inherit;
-          }
-
-          #MegaHeader-{{ section.id }} button {
-            color: inherit;
-          }
-
-          #MegaHeader-{{ section.id }} .visually-hidden {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__container {
-            width: min(100%, {{ section.settings.max_width }}px);
-            margin: 0 auto;
-            padding-right: 7.5%;
-            padding-left: 7.5%;
-          }
-
-          /*
-           * Utility row
-           */
-
-         #MegaHeader-{{ section.id }} .mega-header__utility {
-          min-height: 46px;
-          max-height: 60px;
-          overflow: hidden;
-          opacity: 1;
-          border-bottom: 1px solid var(--header-border);
-          transition:
-            max-height 250ms ease,
-            min-height 250ms ease,
-            opacity 150ms ease;
-        }
-
-        #MegaHeader-{{ section.id }}.utility-hidden .mega-header__utility {
-          min-height: 0;
-          max-height: 0;
-          opacity: 0;
-          border-bottom-width: 0;
-          pointer-events: none;
-        }
 
           #MegaHeader-{{ section.id }} .mega-header__utility-container {
-            min-height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-          }
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: flex-end !important;
+          width: 100% !important;
+        }
 
-          #MegaHeader-{{ section.id }} .mega-header__utility-items {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 22px;
-          }
+        #MegaHeader-{{ section.id }} .mega-header__main-container {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          width: 100% !important;
+        }
 
-          #MegaHeader-{{ section.id }} .mega-header__utility-link,
-          #MegaHeader-{{ section.id }} .mega-header__icon-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            min-height: 44px;
-            font-size: 13px;
-            line-height: 1.2;
-            white-space: nowrap;
-          }
+            #MegaHeader-{{ section.id }} *,
+            #MegaHeader-{{ section.id }} *::before,
+            #MegaHeader-{{ section.id }} *::after {
+              box-sizing: border-box;
+            }
 
-          #MegaHeader-{{ section.id }} .mega-header__wholesale {
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-          }
+            #MegaHeader-{{ section.id }} {
+              position: relative;
+              width: 100%;
+              background: var(--header-background);
+              color: var(--header-text);
+            }
 
-          #MegaHeader-{{ section.id }} .mega-header__utility-link:hover,
-          #MegaHeader-{{ section.id }} .mega-header__icon-link:hover {
-            opacity: 0.7;
-          }
+            #MegaHeader-{{ section.id }} a {
+              color: inherit;
+              text-decoration: none;
+            }
 
-          /*
-           * Expanding desktop search
-           */
+            #MegaHeader-{{ section.id }} button,
+            #MegaHeader-{{ section.id }} input {
+              font: inherit;
+            }
 
-          #MegaHeader-{{ section.id }} .mega-header__search-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            height: 40px;
-          }
+            #MegaHeader-{{ section.id }} button {
+              color: inherit;
+            }
 
-          #MegaHeader-{{ section.id }} .mega-header__search-form {
-            position: absolute;
-            top: 50%;
-            right: 34px;
-            width: 0;
-            height: 38px;
-            opacity: 0;
-            overflow: hidden;
-            pointer-events: none;
-            transform: translateY(-50%);
-            transition:
-              width 300ms ease,
-              opacity 180ms ease;
-          }
-
-          #MegaHeader-{{ section.id }}
-            .mega-header__search-wrapper.is-open
-            .mega-header__search-form {
-            width: min(320px, 30vw);
-            opacity: 1;
-            pointer-events: auto;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__search-input {
-            width: 100%;
-            height: 38px;
-            padding: 7px 42px 7px 14px;
-            color: var(--header-text);
-            background: var(--header-background);
-            border: 1px solid var(--header-border);
-            border-radius: 0;
-            outline: none;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__search-input:focus {
-            border-color: currentColor;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__search-submit {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 40px;
-            height: 38px;
-            display: grid;
-            place-items: center;
-            padding: 0;
-            background: transparent;
-            border: 0;
-            cursor: pointer;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__search-toggle {
-            position: relative;
-            z-index: 2;
-            width: 34px;
-            height: 40px;
-            display: grid;
-            place-items: center;
-            padding: 0;
-            background: var(--header-background);
-            border: 0;
-            cursor: pointer;
-            /* border:1px solid var(--black);
-            border-radius:10px;
-            padding:0 10px; */
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__search-close-icon {
-            display: none;
-          }
-
-          #MegaHeader-{{ section.id }}
-            .mega-header__search-wrapper.is-open
-            .mega-header__search-open-icon {
-            display: none;
-          }
-
-          #MegaHeader-{{ section.id }}
-            .mega-header__search-wrapper.is-open
-            .mega-header__search-close-icon {
-            display: block;
-          }
-
-          /*
-           * Cart count
-           */
-
-          #MegaHeader-{{ section.id }} .mega-header__cart-icon {
-            position: relative;
-            display: inline-flex;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__cart-count {
-            position: absolute;
-            top: -8px;
-            right: -10px;
-            min-width: 18px;
-            height: 18px;
-            display: grid;
-            place-items: center;
-            padding: 0 4px;
-            color: var(--header-background);
-            background: var(--header-text);
-            border-radius: 999px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1;
-          }
-
-          /*
-           * Main navigation row
-           */
-
-          #MegaHeader-{{ section.id }} .mega-header__main {
-            position: relative;
-            min-height: {{ section.settings.main_row_height }}px;
-            border-bottom: 1px solid var(--header-border);
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__main-container {
-            min-height: {{ section.settings.main_row_height }}px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__logo-link {
-            flex: 0 0 auto;
-            display: inline-flex;
-            align-items: center;
-            max-width: var(--logo-width);
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__logo-image {
-            display: block;
-            width: var(--logo-width);
-            max-width: 100%;
-            height: auto;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__shop-name {
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__desktop-navigation {
-            align-self: stretch;
-            display: flex;
-            justify-content: flex-end;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__menu-list {
-            display: flex;
-            align-items: stretch;
-            justify-content: flex-end;
-            gap: {{ section.settings.menu_spacing }}px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__menu-item {
-            position: static;
-            display: flex;
-            align-items: stretch;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__top-link-wrapper {
-            position: relative;
-            display: flex;
-            align-items: stretch;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__top-link {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 0;
-            font-size: {{ section.settings.menu_font_size }}px;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            white-space: nowrap;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__top-link::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            bottom: 18px;
-            left: 0;
-            height: 2px;
-            background: currentColor;
-            transform: scaleX(0);
-            transform-origin: right center;
-            transition: transform 200ms ease;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__top-link:hover::after,
-          #MegaHeader-{{ section.id }} .mega-header__top-link.is-active::after,
-          #MegaHeader-{{ section.id }}
-            .mega-header__menu-item.is-open
-            .mega-header__top-link::after {
-            transform: scaleX(1);
-            transform-origin: left center;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__caret {
-            transition: transform 200ms ease;
-          }
-
-          #MegaHeader-{{ section.id }}
-            .mega-header__menu-item.is-open
-            .mega-header__caret {
-            transform: rotate(180deg);
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__desktop-submenu-toggle {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            padding: 0;
-            background: transparent;
-            border: 0;
-            cursor: pointer;
-          }
-
-          /*
-           * Full-width mega menu
-           */
-
-          #MegaHeader-{{ section.id }} .mega-header__mega-menu {
-            position: absolute;
-            z-index: 20;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            color: var(--mega-text);
-            background: var(--mega-background);
-            border-bottom: 1px solid var(--header-border);
-            box-shadow: 0 14px 24px rgb(0 0 0 / 0.08);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translateY(-16px);
-            transition:
-              transform 250ms ease,
-              opacity 200ms ease,
-              visibility 200ms ease;
-          }
-
-          #MegaHeader-{{ section.id }}
-            .mega-header__menu-item:hover
-            .mega-header__mega-menu,
-          #MegaHeader-{{ section.id }}
-            .mega-header__menu-item:focus-within
-            .mega-header__mega-menu,
-          #MegaHeader-{{ section.id }}
-            .mega-header__menu-item.is-open
-            .mega-header__mega-menu {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0);
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__mega-container {
-            width: min(100%, {{ section.settings.max_width }}px);
-            margin: 0 auto;
-            padding:
-              {{ section.settings.mega_menu_vertical_padding }}px
-              {{ section.settings.horizontal_padding }}px;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__mega-heading {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--header-border);
-            font-size: 20px;
-            font-weight: 700;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__mega-heading a:hover {
-            opacity: 0.7;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__mega-columns {
-            display: grid;
-            grid-template-columns: repeat(
-              {{ section.settings.mega_menu_columns }},
-              minmax(0, 1fr)
-            );
-            gap: 36px 45px;
-            padding-bottom: 20px;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__child-heading {
-            display: inline-block;
-            margin-bottom: 12px;
-            font-size: 15px;
-            font-weight: 700;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__grandchild-list {
-            display: grid;
-            gap: 9px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__grandchild-link {
-            display: inline-block;
-            font-size: 14px;
-            line-height: 1.45;
-            opacity: 0.82;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__child-heading:hover,
-          #MegaHeader-{{ section.id }} .mega-header__grandchild-link:hover {
-            opacity: 0.6;
-          }
-
-          /*
-           * Mobile navigation
-           */
-
-          #MegaHeader-{{ section.id }} .mega-header__mobile-toggle,
-          #MegaHeader-{{ section.id }} .mega-header__mobile-menu {
-            display: none;
-          }
-
-          #MegaHeader-{{ section.id }} .mega-header__mobile-close-icon {
-            display: none;
-          }
-
-          @media screen and (max-width: 989px) {
-            body.mega-header-menu-open {
-              overflow: hidden;
+            #MegaHeader-{{ section.id }} .visually-hidden {
+              position: absolute !important;
+              width: 1px !important;
+              height: 1px !important;
+              padding: 0 !important;
+              margin: -1px !important;
+              overflow: hidden !important;
+              clip: rect(0, 0, 0, 0) !important;
+              white-space: nowrap !important;
+              border: 0 !important;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__container {
-              padding-right: 18px;
-              padding-left: 18px;
+              width: min(100%, {{ section.settings.max_width }}px);
+              margin: 0 auto;
+              padding-right: 7.5%;
+              padding-left: 7.5%;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__utility {
-              min-height: auto;
-            }
+            /*
+             * Utility row
+             */
+
+           #MegaHeader-{{ section.id }} .mega-header__utility {
+            min-height: 46px;
+            max-height: 60px;
+            overflow: hidden;
+            opacity: 1;
+            border-bottom: 1px solid var(--header-border);
+            transition:
+              max-height 250ms ease,
+              min-height 250ms ease,
+              opacity 150ms ease;
+          }
+
+          #MegaHeader-{{ section.id }}.utility-hidden .mega-header__utility {
+            min-height: 0;
+            max-height: 0;
+            opacity: 0;
+            border-bottom-width: 0;
+            pointer-events: none;
+          }
 
             #MegaHeader-{{ section.id }} .mega-header__utility-container {
-              min-height: auto;
-              padding: 0;
+              min-height: 46px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__utility-items {
               width: 100%;
-              min-height: 54px;
-              padding: 0 18px;
-              gap: 16px;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__wholesale {
-              margin-right: auto;
-              font-size: 11px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+              gap: 22px;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__utility-link,
             #MegaHeader-{{ section.id }} .mega-header__icon-link {
-              min-height: 52px;
+              display: inline-flex;
+              align-items: center;
+              gap: 7px;
+              min-height: 44px;
+              font-size: 13px;
+              line-height: 1.2;
+              white-space: nowrap;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__icon-link > span:last-child:not(.mega-header__cart-icon) {
-              display: none;
+            #MegaHeader-{{ section.id }} .mega-header__wholesale {
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.07em;
             }
+
+            #MegaHeader-{{ section.id }} .mega-header__utility-link:hover,
+            #MegaHeader-{{ section.id }} .mega-header__icon-link:hover {
+              opacity: 0.7;
+            }
+
+            /*
+             * Expanding desktop search
+             */
 
             #MegaHeader-{{ section.id }} .mega-header__search-wrapper {
-              position: static;
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+              height: 40px;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__search-form {
-              z-index: 8;
-              top: 100%;
-              right: 0;
-              left: 0;
-              width: 100%;
-              height: 0;
-              padding: 0 18px;
-              background: var(--header-background);
-              border-bottom: 0 solid var(--header-border);
+              position: absolute;
+              top: 50%;
+              right: 34px;
+              width: 0;
+              height: 38px;
               opacity: 0;
-              transform: none;
+              overflow: hidden;
+              pointer-events: none;
+              transform: translateY(-50%);
               transition:
-                height 250ms ease,
-                opacity 180ms ease,
-                padding 250ms ease,
-                border-width 250ms ease;
+                width 300ms ease,
+                opacity 180ms ease;
             }
 
             #MegaHeader-{{ section.id }}
               .mega-header__search-wrapper.is-open
               .mega-header__search-form {
-              width: 100%;
-              height: 62px;
-              padding-top: 11px;
-              padding-bottom: 11px;
-              border-bottom-width: 1px;
+              width: min(320px, 30vw);
               opacity: 1;
+              pointer-events: auto;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__search-input {
-              height: 40px;
+              width: 100%;
+              height: 38px;
+              padding: 7px 42px 7px 14px;
+              color: var(--header-text);
+              background: var(--header-background);
+              border: 1px solid var(--header-border);
+              border-radius: 0;
+              outline: none;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__search-input:focus {
+              border-color: currentColor;
             }
 
             #MegaHeader-{{ section.id }} .mega-header__search-submit {
-              top: 11px;
-              right: 18px;
-              height: 40px;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__desktop-navigation {
-              display: none;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__main {
-              min-height: 76px;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__main-container {
-              min-height: 76px;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__logo-image {
-              width: min(var(--logo-width), 180px);
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-toggle {
-              width: 44px;
-              height: 44px;
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 40px;
+              height: 38px;
               display: grid;
               place-items: center;
               padding: 0;
@@ -1182,194 +903,723 @@
               cursor: pointer;
             }
 
-            #MegaHeader-{{ section.id }}
-              .mega-header__mobile-toggle.is-open
-              .mega-header__mobile-open-icon {
+            #MegaHeader-{{ section.id }} .mega-header__search-toggle {
+              position: relative;
+              z-index: 2;
+              width: 34px;
+              height: 40px;
+              display: grid;
+              place-items: center;
+              padding: 0;
+              background: var(--header-background);
+              border: 0;
+              cursor: pointer;
+              /* border:1px solid var(--black);
+              border-radius:10px;
+              padding:0 10px; */
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__search-close-icon {
               display: none;
             }
 
             #MegaHeader-{{ section.id }}
-              .mega-header__mobile-toggle.is-open
-              .mega-header__mobile-close-icon {
+              .mega-header__search-wrapper.is-open
+              .mega-header__search-open-icon {
+              display: none;
+            }
+
+            #MegaHeader-{{ section.id }}
+              .mega-header__search-wrapper.is-open
+              .mega-header__search-close-icon {
               display: block;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-menu {
+            /*
+             * Cart count
+             */
+
+            #MegaHeader-{{ section.id }} .mega-header__cart-icon {
+              position: relative;
+              display: inline-flex;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__cart-count {
               position: absolute;
-              z-index: 19;
-              top: 100%;
-              right: 0;
-              left: 0;
-              display: block;
-              max-height: 0;
-              overflow: hidden;
-              color: var(--mega-text);
-              background: var(--mega-background);
+              top: -8px;
+              right: -10px;
+              min-width: 18px;
+              height: 18px;
+              display: grid;
+              place-items: center;
+              padding: 0 4px;
+              color: var(--header-background);
+              background: var(--header-text);
+              border-radius: 999px;
+              font-size: 10px;
+              font-weight: 700;
+              line-height: 1;
+            }
+
+            /*
+             * Main navigation row
+             */
+
+            #MegaHeader-{{ section.id }} .mega-header__main {
+              position: relative;
+              min-height: {{ section.settings.main_row_height }}px;
               border-bottom: 1px solid var(--header-border);
-              box-shadow: 0 16px 24px rgb(0 0 0 / 0.12);
-              opacity: 0;
-              visibility: hidden;
-              transition:
-                max-height 400ms ease,
-                opacity 220ms ease,
-                visibility 220ms ease;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-menu.is-open {
-              max-height: calc(100vh - 100px);
-              overflow-y: auto;
-              overscroll-behavior: contain;
-              opacity: 1;
-              visibility: visible;
+            #MegaHeader-{{ section.id }} .mega-header__main-container {
+              min-height: {{ section.settings.main_row_height }}px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 40px;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-menu-inner {
-              padding: 12px 18px 32px;
+            #MegaHeader-{{ section.id }} .mega-header__logo-link {
+              flex: 0 0 auto;
+              display: inline-flex;
+              align-items: center;
+              max-width: var(--logo-width);
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-list,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu ul,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren ul {
+            #MegaHeader-{{ section.id }} .mega-header__logo-image {
+              display: block;
+              width: var(--logo-width);
+              max-width: 100%;
+              height: auto;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__shop-name {
+              font-size: 24px;
+              font-weight: 700;
+              line-height: 1;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__desktop-navigation {
+              align-self: stretch;
+              display: flex;
+              justify-content: flex-end;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__menu-list {
+              display: flex;
+              align-items: stretch;
+              justify-content: flex-end;
+              gap: {{ section.settings.menu_spacing }}px;
               margin: 0;
               padding: 0;
               list-style: none;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-item {
-              border-bottom: 1px solid var(--header-border);
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-link-row,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-child-row {
+            #MegaHeader-{{ section.id }} .mega-header__menu-item {
+              position: static;
               display: flex;
               align-items: stretch;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-link {
-              flex: 1 1 auto;
+            #MegaHeader-{{ section.id }} .mega-header__top-link-wrapper {
+              position: relative;
               display: flex;
-              align-items: center;
-              min-height: 58px;
-              padding: 12px 0;
-              font-size: 17px;
-              font-weight: 650;
+              align-items: stretch;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu-toggle,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-child-toggle {
-              flex: 0 0 52px;
-              display: grid;
-              place-items: center;
+            #MegaHeader-{{ section.id }} .mega-header__top-link {
+              position: relative;
+              display: flex;
+              align-items: center;
+              gap: 7px;
+              padding: 0;
+              font-size: {{ section.settings.menu_font_size }}px;
+              font-weight: 600;
+              letter-spacing: 0.01em;
+              white-space: nowrap;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__top-link::after {
+              content: "";
+              position: absolute;
+              right: 0;
+              bottom: 18px;
+              left: 0;
+              height: 2px;
+              background: currentColor;
+              transform: scaleX(0);
+              transform-origin: right center;
+              transition: transform 200ms ease;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__top-link:hover::after,
+            #MegaHeader-{{ section.id }} .mega-header__top-link.is-active::after,
+            #MegaHeader-{{ section.id }}
+              .mega-header__menu-item.is-open
+              .mega-header__top-link::after {
+              transform: scaleX(1);
+              transform-origin: left center;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__caret {
+              transition: transform 200ms ease;
+            }
+
+            #MegaHeader-{{ section.id }}
+              .mega-header__menu-item.is-open
+              .mega-header__caret {
+              transform: rotate(180deg);
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__desktop-submenu-toggle {
+              position: absolute;
+              inset: 0;
+              width: 100%;
               padding: 0;
               background: transparent;
               border: 0;
               cursor: pointer;
             }
 
-            #MegaHeader-{{ section.id }}
-              .mega-header__mobile-submenu-toggle
-              svg,
-            #MegaHeader-{{ section.id }}
-              .mega-header__mobile-child-toggle
-              svg {
-              transition: transform 200ms ease;
+            /*
+             * Full-width mega menu
+             */
+
+            #MegaHeader-{{ section.id }} .mega-header__mega-menu {
+              position: absolute;
+              z-index: 20;
+              top: 100%;
+              left: 0;
+              width: 100%;
+              color: var(--mega-text);
+              background: var(--mega-background);
+              border-bottom: 1px solid var(--header-border);
+              box-shadow: 0 14px 24px rgb(0 0 0 / 0.08);
+              opacity: 0;
+              visibility: hidden;
+              pointer-events: none;
+              transform: translateY(-16px);
+              transition:
+                transform 250ms ease,
+                opacity 200ms ease,
+                visibility 200ms ease;
             }
 
             #MegaHeader-{{ section.id }}
-              .mega-header__mobile-submenu-toggle[aria-expanded="true"]
-              svg,
+              .mega-header__menu-item:hover
+              .mega-header__mega-menu,
             #MegaHeader-{{ section.id }}
-              .mega-header__mobile-child-toggle[aria-expanded="true"]
-              svg {
-              transform: rotate(180deg);
+              .mega-header__menu-item:focus-within
+              .mega-header__mega-menu,
+            #MegaHeader-{{ section.id }}
+              .mega-header__menu-item.is-open
+              .mega-header__mega-menu {
+              opacity: 1;
+              visibility: visible;
+              pointer-events: auto;
+              transform: translateY(0);
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren {
+            #MegaHeader-{{ section.id }} .mega-header__mega-container {
+              width: min(100%, {{ section.settings.max_width }}px);
+              margin: 0 auto;
+              padding:
+                {{ section.settings.mega_menu_vertical_padding }}px
+                {{ section.settings.horizontal_padding }}px;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__mega-heading {
+              margin-bottom: 25px;
+              padding-bottom: 15px;
+              border-bottom: 1px solid var(--header-border);
+              font-size: 20px;
+              font-weight: 700;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__mega-heading a:hover {
+              opacity: 0.7;
+            }
+
+            #MegaHeader-{{ section.id }} .mega-header__mega-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 350px;
+    max-height: 500px;
+  }
+
+  /* LEFT SIDE */
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-sidebar {
+    padding-right: 30px;
+    border-right: 1px solid var(--header-border);
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    padding: 13px 15px;
+
+    font-size: 15px;
+    line-height: 1.3;
+
+    transition:
+      background-color 150ms ease,
+      padding-left 150ms ease;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-sidebar-link:hover,
+  #MegaHeader-{{ section.id }} .mega-header__mega-sidebar-link.is-active {
+    background: rgba(0, 0, 0, 0.05);
+    padding-left: 20px;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-sidebar-arrow {
+    flex: 0 0 auto;
+    opacity: 0.6;
+  }
+
+  /* RIGHT SIDE */
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-content {
+    position: relative;
+    min-width: 0;
+    padding-left: 45px;
+    overflow: hidden;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-panel {
+    display: none;
+    height: 100%;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-panel.is-active {
+    display: block;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-panel-header {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-panel-header a:hover {
+    opacity: 0.7;
+  }
+
+  /*
+   * Scrollable two-column list
+   */
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-products {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 40px;
+
+    max-height: 330px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    padding-right: 20px;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-product-link {
+    display: block;
+
+    padding: 12px 5px;
+
+    border-bottom: 1px solid var(--header-border);
+
+    font-size: 14px;
+    line-height: 1.4;
+
+    transition:
+      opacity 150ms ease,
+      padding-left 150ms ease;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-product-link:hover {
+    padding-left: 10px;
+    opacity: 0.65;
+  }
+
+  #MegaHeader-{{ section.id }} .mega-header__mega-view-all {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    padding:20px 0;
+  }
+
+  /* Scrollbar */
+
+  #MegaHeader-{{ section.id }}
+    .mega-header__mega-products::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #MegaHeader-{{ section.id }}
+    .mega-header__mega-products::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  #MegaHeader-{{ section.id }}
+    .mega-header__mega-products::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+  }
+
+            /* #MegaHeader-{{ section.id }} .mega-header__mega-columns {
               display: grid;
-              grid-template-rows: 0fr;
-              transition: grid-template-rows 250ms ease;
+              grid-template-columns: repeat(
+                {{ section.settings.mega_menu_columns }},
+                minmax(0, 1fr)
+              );
+              gap: 36px 45px;
+              padding-bottom: 20px;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu > ul,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren > ul {
-              overflow: hidden;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu.is-open,
-            #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren.is-open {
-              grid-template-rows: 1fr;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-submenu > ul {
-              padding: 0 0 12px 14px;
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-child-row {
-              border-top: 1px solid rgb(0 0 0 / 0.06);
-            }
-
-            #MegaHeader-{{ section.id }} .mega-header__mobile-child-link {
-              flex: 1 1 auto;
-              display: flex;
-              align-items: center;
-              min-height: 48px;
-              padding: 10px 0;
+            #MegaHeader-{{ section.id }} .mega-header__child-heading {
+              display: inline-block;
+              margin-bottom: 12px;
               font-size: 15px;
-              font-weight: 650;
+              font-weight: 700;
             }
 
-            #MegaHeader-{{ section.id }}
-              .mega-header__mobile-grandchildren
-              > ul {
+            #MegaHeader-{{ section.id }} .mega-header__grandchild-list {
               display: grid;
-              gap: 12px;
-              padding: 2px 0 18px 18px;
+              gap: 9px;
+              margin: 0;
+              padding: 0;
+              list-style: none;
             }
 
-            #MegaHeader-{{ section.id }}
-              .mega-header__mobile-grandchildren
-              a {
+            #MegaHeader-{{ section.id }} .mega-header__grandchild-link {
+              display: inline-block;
               font-size: 14px;
-              opacity: 0.78;
+              line-height: 1.45;
+              opacity: 0.82;
+            } */
+
+            #MegaHeader-{{ section.id }} .mega-header__child-heading:hover,
+            #MegaHeader-{{ section.id }} .mega-header__grandchild-link:hover {
+              opacity: 0.6;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-utility {
-              display: grid;
-              gap: 14px;
-              padding-top: 26px;
+            /*
+             * Mobile navigation
+             */
+
+            #MegaHeader-{{ section.id }} .mega-header__mobile-toggle,
+            #MegaHeader-{{ section.id }} .mega-header__mobile-menu {
+              display: none;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__mobile-utility a {
-              font-size: 14px;
-              font-weight: 600;
-            }
-          }
-
-          @media screen and (max-width: 480px) {
-            #MegaHeader-{{ section.id }} .mega-header__utility-items {
-              gap: 10px;
+            #MegaHeader-{{ section.id }} .mega-header__mobile-close-icon {
+              display: none;
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__wholesale {
-              max-width: 135px;
-              line-height: 1.35;
-              white-space: normal;
+            @media screen and (max-width: 989px) {
+              body.mega-header-menu-open {
+                overflow: hidden;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__container {
+                padding-right: 18px;
+                padding-left: 18px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__utility {
+                min-height: auto;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__utility-container {
+                min-height: auto;
+                padding: 0;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__utility-items {
+                width: 100%;
+                min-height: 54px;
+                padding: 0 18px;
+                gap: 16px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__wholesale {
+                margin-right: auto;
+                font-size: 11px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__utility-link,
+              #MegaHeader-{{ section.id }} .mega-header__icon-link {
+                min-height: 52px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__icon-link > span:last-child:not(.mega-header__cart-icon) {
+                display: none;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__search-wrapper {
+                position: static;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__search-form {
+                z-index: 8;
+                top: 100%;
+                right: 0;
+                left: 0;
+                width: 100%;
+                height: 0;
+                padding: 0 18px;
+                background: var(--header-background);
+                border-bottom: 0 solid var(--header-border);
+                opacity: 0;
+                transform: none;
+                transition:
+                  height 250ms ease,
+                  opacity 180ms ease,
+                  padding 250ms ease,
+                  border-width 250ms ease;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__search-wrapper.is-open
+                .mega-header__search-form {
+                width: 100%;
+                height: 62px;
+                padding-top: 11px;
+                padding-bottom: 11px;
+                border-bottom-width: 1px;
+                opacity: 1;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__search-input {
+                height: 40px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__search-submit {
+                top: 11px;
+                right: 18px;
+                height: 40px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__desktop-navigation {
+                display: none;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__main {
+                min-height: 76px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__main-container {
+                min-height: 76px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__logo-image {
+                width: min(var(--logo-width), 180px);
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-toggle {
+                width: 44px;
+                height: 44px;
+                display: grid;
+                place-items: center;
+                padding: 0;
+                background: transparent;
+                border: 0;
+                cursor: pointer;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-toggle.is-open
+                .mega-header__mobile-open-icon {
+                display: none;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-toggle.is-open
+                .mega-header__mobile-close-icon {
+                display: block;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-menu {
+                position: absolute;
+                z-index: 19;
+                top: 100%;
+                right: 0;
+                left: 0;
+                display: block;
+                max-height: 0;
+                overflow: hidden;
+                color: var(--mega-text);
+                background: var(--mega-background);
+                border-bottom: 1px solid var(--header-border);
+                box-shadow: 0 16px 24px rgb(0 0 0 / 0.12);
+                opacity: 0;
+                visibility: hidden;
+                transition:
+                  max-height 400ms ease,
+                  opacity 220ms ease,
+                  visibility 220ms ease;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-menu.is-open {
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                opacity: 1;
+                visibility: visible;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-menu-inner {
+                padding: 12px 18px 32px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-list,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu ul,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-item {
+                border-bottom: 1px solid var(--header-border);
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-link-row,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-child-row {
+                display: flex;
+                align-items: stretch;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-link {
+                flex: 1 1 auto;
+                display: flex;
+                align-items: center;
+                min-height: 58px;
+                padding: 12px 0;
+                font-size: 17px;
+                font-weight: 650;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu-toggle,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-child-toggle {
+                flex: 0 0 52px;
+                display: grid;
+                place-items: center;
+                padding: 0;
+                background: transparent;
+                border: 0;
+                cursor: pointer;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-submenu-toggle
+                svg,
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-child-toggle
+                svg {
+                transition: transform 200ms ease;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-submenu-toggle[aria-expanded="true"]
+                svg,
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-child-toggle[aria-expanded="true"]
+                svg {
+                transform: rotate(180deg);
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows 250ms ease;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu > ul,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren > ul {
+                overflow: hidden;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu.is-open,
+              #MegaHeader-{{ section.id }} .mega-header__mobile-grandchildren.is-open {
+                grid-template-rows: 1fr;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-submenu > ul {
+                padding: 0 0 12px 14px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-child-row {
+                border-top: 1px solid rgb(0 0 0 / 0.06);
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-child-link {
+                flex: 1 1 auto;
+                display: flex;
+                align-items: center;
+                min-height: 48px;
+                padding: 10px 0;
+                font-size: 15px;
+                font-weight: 650;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-grandchildren
+                > ul {
+                display: grid;
+                gap: 12px;
+                padding: 2px 0 18px 18px;
+              }
+
+              #MegaHeader-{{ section.id }}
+                .mega-header__mobile-grandchildren
+                a {
+                font-size: 14px;
+                opacity: 0.78;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-utility {
+                display: grid;
+                gap: 14px;
+                padding-top: 26px;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__mobile-utility a {
+                font-size: 14px;
+                font-weight: 600;
+              }
             }
 
-            #MegaHeader-{{ section.id }} .mega-header__logo-image {
-              width: min(var(--logo-width), 150px);
-            }
-          }
+            @media screen and (max-width: 480px) {
+              #MegaHeader-{{ section.id }} .mega-header__utility-items {
+                gap: 10px;
+              }
 
-          @media (prefers-reduced-motion: reduce) {
-            #MegaHeader-{{ section.id }} *,
-            #MegaHeader-{{ section.id }} *::before,
-            #MegaHeader-{{ section.id }} *::after {
-              scroll-behavior: auto !important;
-              transition-duration: 0.01ms !important;
+              #MegaHeader-{{ section.id }} .mega-header__wholesale {
+                max-width: 135px;
+                line-height: 1.35;
+                white-space: normal;
+              }
+
+              #MegaHeader-{{ section.id }} .mega-header__logo-image {
+                width: min(var(--logo-width), 150px);
+              }
             }
-          }
+
+            @media (prefers-reduced-motion: reduce) {
+              #MegaHeader-{{ section.id }} *,
+              #MegaHeader-{{ section.id }} *::before,
+              #MegaHeader-{{ section.id }} *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+              }
+            }
 {% endstyle %}
 
 <script>
@@ -1468,6 +1718,59 @@
       item.addEventListener('mouseenter', () => {
         closeDesktopMegaMenus(item);
         header.classList.remove('utility-hidden');
+      });
+    });
+
+    /*
+     * Mega menu second-level navigation
+     */
+
+    header.querySelectorAll('[data-mega-menu]').forEach((megaMenu) => {
+      const sidebarLinks = megaMenu.querySelectorAll('[data-mega-sidebar-link]');
+
+      const panels = megaMenu.querySelectorAll('[data-mega-panel]');
+
+      function activateMegaPanel(sidebarLink) {
+        const targetId = sidebarLink.dataset.megaTarget;
+
+        if (!targetId) return;
+
+        const targetPanel = megaMenu.querySelector(`#${CSS.escape(targetId)}`);
+
+        if (!targetPanel) return;
+
+        /*
+         * Remove current active states.
+         */
+        sidebarLinks.forEach((link) => {
+          link.classList.remove('is-active');
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.remove('is-active');
+        });
+
+        /*
+         * Activate hovered item and corresponding panel.
+         */
+        sidebarLink.classList.add('is-active');
+        targetPanel.classList.add('is-active');
+      }
+
+      sidebarLinks.forEach((sidebarLink) => {
+        /*
+         * Desktop hover
+         */
+        sidebarLink.addEventListener('mouseenter', () => {
+          activateMegaPanel(sidebarLink);
+        });
+
+        /*
+         * Keyboard accessibility
+         */
+        sidebarLink.addEventListener('focus', () => {
+          activateMegaPanel(sidebarLink);
+        });
       });
     });
 

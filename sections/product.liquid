@@ -307,7 +307,7 @@
               <button
                 type="submit"
                 name="add"
-                class="product-add-button"
+                class="main-btn"
                 data-add-to-cart
                 {% unless current_variant.available %}
                   disabled
@@ -424,6 +424,7 @@
       height: 90px;
       padding: 0;
       overflow: hidden;
+      border-radius:10px;
 
       border: 1px solid transparent;
       background: #f3f3f3;
@@ -465,7 +466,8 @@
 
     .product-media__item {
       display: none;
-
+      border-radius:10px;
+      border-top-right-radius:50px;
       width: 100%;
 
       overflow: hidden;
