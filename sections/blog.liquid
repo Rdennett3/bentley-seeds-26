@@ -7,101 +7,236 @@
 
 {{ 'variables.css' | asset_url | stylesheet_tag }}
 
-<div class="blog-title-container">
-  <h1>{{ blog.title }}</h1>
-</div>
-
-<div class="blog-filter-container">
-  <div class="blog-topic-select">
-    <label for="BlogTopicSelect" class="blog-topic-select__label"> Browse by topic </label>
-
-    <select
-      id="BlogTopicSelect"
-      class="blog-topic-select__select"
-      onchange="if (this.value) window.location.href = this.value;"
-    >
-      <option
-        value="{{ blog.url }}"
-        {% if current_tags == blank %}
-          selected
-        {% endif %}
-      >
-        All Articles
-      </option>
-
-      {% for tag in blog.all_tags %}
-        <option
-          value="{{ blog.url }}/tagged/{{ tag | handle }}"
-          {% if current_tags contains tag %}
-            selected
-          {% endif %}
-        >
-          {{ tag }}
-        </option>
-      {% endfor %}
-    </select>
+<div class="blog-title-container full-width">
+  <div class="blog-title-wrapper">
+    <h1>{{ blog.title }}</h1>
   </div>
 </div>
 
-{% paginate blog.articles by 8 %}
-  <div class="blog-container">
-    {% for article in blog.articles %}
-      <div class="article-container">
-        <div class="image-wrapper">
-          <a href="{{ article.url }}">
-            {% if article.image %}
-              {{
-                article.image
-                | image_url: width: 800
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '400, 600, 800',
-                  sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
-                  alt: article.image.alt
-              }}
-            {% elsif section.settings.default_blog_image %}
-              {{
-                section.settings.default_blog_image
-                | image_url: width: 800
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '400, 600, 800',
-                  sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
-                  alt: article.title
-              }}
+{% comment %}
+  <div class="blog-filter-container">
+    <div class="blog-topic-select">
+      <label for="BlogTopicSelect" class="blog-topic-select__label"> Browse by topic </label>
+
+      <select
+        id="BlogTopicSelect"
+        class="blog-topic-select__select"
+        onchange="if (this.value) window.location.href = this.value;"
+      >
+        <option
+          value="{{ blog.url }}"
+          {% if current_tags == blank %}
+            selected
+          {% endif %}
+        >
+          All Articles
+        </option>
+
+        {% for tag in blog.all_tags %}
+          <option
+            value="{{ blog.url }}/tagged/{{ tag | handle }}"
+            {% if current_tags contains tag %}
+              selected
             {% endif %}
-          </a>
-        </div>
+          >
+            {{ tag }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endcomment %}
 
-        <div class="info-wrapper">
-          <h2 class="article-title">
-            <a href="{{ article.url }}">
-              {{ article.title }}
-            </a>
-          </h2>
-
-          <div class="article-meta">
-            <span class="article-blog">
-              {{ blog.title }}
-            </span>
-
-            <span class="article-date">
-              {{ article.published_at | date: '%B %d, %Y' }}
-            </span>
-          </div>
-
-          <div class="article-excerpt">
-            {% if article.excerpt != blank %}
-              {{ article.excerpt | strip_html | truncatewords: 30 }}
-            {% else %}
-              {{ article.content | strip_html | truncatewords: 30 }}
-            {% endif %}
-          </div>
-
-          <a href="{{ article.url }}" class="article-read-more main-btn"> Read More </a>
-        </div>
+<div class="featured-blog-container full-width">
+  {% comment %}
+    <div class="featured-blog-header">
+      <div class="featured-blog-header-wrapper">
+        <h2>Featured Article</h2>
       </div>
-    {% endfor %}
+    </div>
+  {% endcomment %}
+  <div class="featured-blog-wrapper">
+    {% assign featured_article = blog.articles.first %}
+    <div class="featured-blog-section" style="position:relative">
+      <a href="{{ featured_article.url }}">
+        {% if featured_article.image %}
+          <img
+            src="{{ featured_article.image | image_url: width: 1200 }}"
+            alt="{{ featured_article.image.alt | default: featured_article.title | escape }}"
+            width="{{ featured_article.image.width }}"
+            height="{{ featured_article.image.height }}"
+            loading="eager"
+          >
+          <div
+            class="featured-tag"
+            style="position:absolute; top:20px; left:20px; padding:10px 5%; background:#fff; border-radius:10px; color:#000;"
+          >
+            <h2>Featured article</h2>
+          </div>
+        {% endif %}
+      </a>
+    </div>
+    <div class="featured-blog-section">
+      <h2>
+        <a href="{{ featured_article.url }}">
+          {{ featured_article.title }}
+        </a>
+      </h2>
+      <span class="featured-blog__date">
+        {{ featured_article.published_at | date: '%B %d, %Y' }}
+      </span>
+      <div class="featured-blog__excerpt">
+        {% if featured_article.excerpt != blank %}
+          {{ featured_article.excerpt }}
+        {% else %}
+          {{ featured_article.content | strip_html | truncatewords: 35 }}
+        {% endif %}
+      </div>
+      <a href="{{ featured_article.url }}" class="main-btn featured-blog__button"> Read More </a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .featured-blog-header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0 25px 0;
+  }
+
+  .featured-blog-header-wrapper {
+    width: var(--inner-width);
+    max-width: var(--max-width);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .featured-blog-header-wrapper h2 {
+    font-size: clamp(2em, 4vw, 6em);
+    font-weight: 400;
+  }
+
+  .featured-blog-container {
+    width: 100%;
+    height: auto;
+    /* padding: 2.5% 0; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    margin-bottom: 2em;
+  }
+
+  .featured-blog-wrapper {
+    width: var(--inner-width);
+    max-width: var(--max-width);
+    height: auto;
+    /* min-height: 75vh; */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1em;
+    border: 2px solid var(--black);
+    border-radius: var(--radius);
+    padding: 1em;
+    /* box-shadow: 30px 30px 0 var(--orange); */
+  }
+
+  .featured-blog-section {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    border-radius: var(--radius);
+  }
+
+  .featured-blog-section:nth-of-type(1) {
+    /* border: 1px solid var(--black); */
+  }
+
+  .featured-blog-section:nth-of-type(1) img {
+    border-radius: var(--radius);
+  }
+
+  .featured-blog-section:nth-of-type(2) {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 10% 0 0 5%;
+  }
+
+  .featured-blog-section:nth-of-type(2) h2 a {
+    color: var(--black);
+    text-decoration: none;
+  }
+{% endstylesheet %}
+
+{% paginate blog.articles by 9 %}
+  <div class="blog-container full-width">
+    <div class="blog-wrapper">
+      {% for article in blog.articles offset: 1 %}
+        <div class="article-container">
+          <div class="image-wrapper">
+            <a href="{{ article.url }}">
+              {% if article.image %}
+                {{
+                  article.image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800',
+                    sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                    alt: article.image.alt
+                }}
+              {% elsif section.settings.default_blog_image %}
+                {{
+                  section.settings.default_blog_image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800',
+                    sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                    alt: article.title
+                }}
+              {% endif %}
+            </a>
+          </div>
+
+          <div class="info-wrapper">
+            <h2 class="article-title">
+              <a href="{{ article.url }}">
+                {{ article.title }}
+              </a>
+            </h2>
+
+            <div class="article-meta">
+              <span class="article-blog">
+                {{ blog.title }}
+              </span>
+
+              <span class="article-date">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </span>
+            </div>
+
+            <div class="article-excerpt">
+              {% if article.excerpt != blank %}
+                {{ article.excerpt | strip_html | truncatewords: 30 }}
+              {% else %}
+                {{ article.content | strip_html | truncatewords: 30 }}
+              {% endif %}
+            </div>
+
+            <a href="{{ article.url }}" class="article-read-more main-btn"> Read More </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 
   {% if paginate.pages > 1 %}
@@ -120,14 +255,33 @@
       width: 100%;
       height: auto;
       display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: 2.5% 0;
+      align-items: center;
+      justify-content: center;
+      margin-top:1em;
+      padding:2.5% 0;
+    }
+
+    .blog-title-container h1 {
+      font-weight:600;
+      font-size: clamp(2.5em, 4.5vw, 6em);
+    }
+
+    .blog-title-wrapper {
+      width:var(--inner-width);
+      max-width:var(--max-width);
     }
 
     .blog-container {
       width: 100%;
       height: auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .blog-wrapper {
+      width:var(--inner-width);
+      max-width:var(--max-width);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1em;
@@ -227,6 +381,7 @@
 
   .blog-filter-wrapper {
     width:var(--inner-width);
+    max-width:var(--max-width);
     border:2px solid red;
   }
 

@@ -1,5 +1,6 @@
 :root {
-    --inner-width: 90%;
+    --inner-width: 95%;
+    --max-width: 1600px;
     --max-inner-width: 1600px;
     --black: #000000;
     --off-white: #F8F9F6;

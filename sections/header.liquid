@@ -28,7 +28,7 @@
         {% if section.settings.wholesale_text != blank %}
           <a
             class="mega-header__utility-link mega-header__wholesale"
-            href="/apps/wpdapp/wholesale/login"
+            href="{{ section.settings.wholesale_url | default: routes.account_login_url }}"
           >
             {{ section.settings.wholesale_text | escape }}
           </a>
@@ -1248,15 +1248,10 @@
 
   #MegaHeader-{{ section.id }} .mega-header__mega-view-all {
     display: inline-block;
-    font-size: 24px;
+    font-size: 14px;
     font-weight: 600;
     padding:20px 0;
   }
-
-  /* #MegaHeader-{{ section.id }} .mega-header__mega-view-all-wrapper {
-    border-top:.5px solid var(--black);
-    padding-left: 1.5%;
-  } */
 
   /* Scrollbar */
 
