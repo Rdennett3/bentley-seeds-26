@@ -5,55 +5,121 @@
 {{ 'variables.css' | asset_url | stylesheet_tag }}
 
 {% style %}
-  .section-{{ section.id }} {
-    /* display:none; */
-  }
-  .expandable-container {
-    width:100%;
-    height:auto;
-    background:var(--off-white);
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    min-height:70vh;
-    margin-bottom:10%;
+      .section-{{ section.id }} {
+        /* display:none; */
+      }
+      .expandable-container {
+        width:100%;
+        height:auto;
+        background:var(--off-white);
+        display:flex;
+        align-items:center;
+        justify-content: center;
+      }
+
+      .expandable-wrapper {
+        width:var(--inner-width);
+        max-width:var(--max-width);
+        background:var(--off-white);
+        display:flex;
+        flex-direction:column;
+      }
+
+      .expandable-section:nth-of-type(1) {
+        display:flex;
+        align-items:flex-start;
+        justify-content:flex-start;
+        padding:2.5% 0;
+      }
+
+      .expandable-section:nth-of-type(1) h2 {
+        font-size:3em;
+      }
+
+      .expandable-section:nth-of-type(2) {
+      display: flex;
+      gap: .5em;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .expandable-item {
+      flex: 1 1 0;
+      min-width: 0;
+      border:1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      transition: flex-grow 0.5s ease;
+      margin-bottom:3em;
+      min-height:50vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      /* background-image:url('https://cdn.shopify.com/s/files/1/0562/4205/files/vegetables-new.png?v=1788444801');
+      background-size:cover;
+      background-position:center; */
+    }
+
+    .expandable-item:nth-of-type(1){
+      background:orange;
+    }
+
+    .expandable-item:nth-of-type(2) {
+      background:yellowgreen;
+    }
+    .expandable-item:nth-of-type(3) {
+      background:red;
+    }
+    /* Grow the hovered item */
+    .expandable-section:nth-of-type(2):hover .expandable-item {
+      flex-grow: 0.7;
+    }
+
+    .expandable-section:nth-of-type(2) .expandable-item:hover {
+      flex-grow: 1.15;
+    }
+
+    .expandable-item__image {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.6s ease;
   }
 
-  .expandable-wrapper {
-    width:var(--inner-width);
-    height:60vh;
-    background:var(--off-white);
-    display:flex;
-    flex-direction:column;
+  .expandable-item:hover .expandable-item__image {
+    transform: scale(1.05);
   }
 
-  .expandable-section:nth-of-type(1) {
-    display:flex;
-    align-items:flex-start;
-    justify-content:flex-start;
-    padding:2.5% 0;
+  .expandable-item__overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.25);
+
+    z-index: 1;
   }
 
-  .expandable-section:nth-of-type(1) h2 {
-    font-size:3em;
+  .expandable-item__content {
+    position: relative;
+    z-index: 2;
+
+    padding: 2rem;
+
+    color: white;
   }
 
-  .expandable-section:nth-of-type(2) {
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-    gap:.5em;
-  }
-
-  .expandable-item {
-    width:100%;
-    height:auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:60vh;
-    background:red;
-    border-radius:var(--radius);
-    font-size:3em;
+  .expandable-item__content h3 {
+    font-size: 1.5rem;
+    margin: 0;
   }
 {% endstyle %}
 
@@ -64,9 +130,31 @@
         <h2><strong>Shop</strong> Collections</h2>
       </div>
       <div class="expandable-section">
-        <div class="expandable-item">1</div>
-        <div class="expandable-item">2</div>
-        <div class="expandable-item">3</div>
+        {% for block in section.blocks %}
+          {% assign collection = block.settings.collection %}
+
+          {% if collection != blank %}
+            <a
+              href="{{ collection.url }}"
+              class="expandable-item"
+              {{ block.shopify_attributes }}
+            >
+              {% if collection.featured_image %}
+                {{
+                  collection.featured_image
+                  | image_url: width: 1600
+                  | image_tag: loading: 'lazy', class: 'expandable-item__image', alt: collection.title
+                }}
+              {% endif %}
+
+              <div class="expandable-item__overlay"></div>
+
+              <div class="expandable-item__content">
+                <h3>{{ collection.title }}</h3>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -81,10 +169,34 @@
   "tag": "section",
   "class": "shopify-section",
   "settings": [],
-  "blocks": [],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "presets": [
     {
-      "name": "Expandable Collections"
+      "name": "Expandable Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
     }
   ]
 }
