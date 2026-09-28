@@ -96,6 +96,31 @@
     },
     "homepage_expandable_collections_pDhCGm": {
       "type": "homepage-expandable-collections",
+      "blocks": {
+        "collection_EdG7xb": {
+          "type": "collection",
+          "settings": {
+            "collection": "personalized-custom-seed-packets"
+          }
+        },
+        "collection_LEbRpz": {
+          "type": "collection",
+          "settings": {
+            "collection": "special-occasions"
+          }
+        },
+        "collection_fpG3QH": {
+          "type": "collection",
+          "settings": {
+            "collection": "home-gardener"
+          }
+        }
+      },
+      "block_order": [
+        "collection_EdG7xb",
+        "collection_LEbRpz",
+        "collection_fpG3QH"
+      ],
       "name": "Expandable Collections",
       "settings": {}
     },
