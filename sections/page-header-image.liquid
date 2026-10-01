@@ -1,4 +1,6 @@
-<section class="page-header-image section-{{ section.id }}">
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<section class="page-header-image section-{{ section.id }} full-width">
   {% if section.settings.image != blank %}
     {{
       section.settings.image
@@ -12,12 +14,19 @@
   {% else %}
     {{ 'lifestyle-1' | placeholder_svg_tag: 'page-header-image__placeholder' }}
   {% endif %}
+
+  <div class="page-header-image__overlay">
+    <h1 class="page-header-image__title">
+      {{ page.title }}
+    </h1>
+  </div>
 </section>
 
 {% style %}
-  .section-{{ section.id }} {
+    .section-{{ section.id }} {
     width: 100%;
     overflow: hidden;
+    position: relative;
   }
 
   .section-{{ section.id }} .page-header-image__image {
@@ -34,10 +43,47 @@
     height: {{ section.settings.desktop_height }}px;
   }
 
+  /* Bottom overlay */
+  .section-{{ section.id }} .page-header-image__overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /* background:rgba(244, 145, 43, .5); */
+    background: linear-gradient(180deg,rgba(244, 145, 43, .15) 0%, rgba(244, 145, 43, .5) 50%, rgba(244, 145, 43, .8) 100%);
+    height:100%;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-start;
+    padding:0 0 5% 5%;
+    box-sizing: border-box;
+  }
+
+  /* Page title */
+  .section-{{ section.id }} .page-header-image__title {
+    margin: 0;
+    color: var(--black);
+    padding:15px 30px;
+    border:1px solid var(--black);
+    background:var(--off-white);
+    border-radius:25px;
+    font-size: 48px;
+    line-height: 1.1;
+  }
+
   @media screen and (max-width: 749px) {
+
     .section-{{ section.id }} .page-header-image__image,
     .section-{{ section.id }} .page-header-image__placeholder {
       height: {{ section.settings.mobile_height }}px;
+    }
+
+    .section-{{ section.id }} .page-header-image__overlay {
+      padding: 18px 20px;
+    }
+
+    .section-{{ section.id }} .page-header-image__title {
+      font-size: 32px;
     }
   }
 {% endstyle %}

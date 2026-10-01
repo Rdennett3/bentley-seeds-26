@@ -1,0 +1,211 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="two-col-container full-width">
+  <div class="two-col-wrapper">
+    {% for block in section.blocks %}
+      <div
+        class="two-col-item two-col-item--{{ block.settings.alignment }}"
+        {% if block.settings.background_image != blank %}
+          style="background-image: url('{{ block.settings.background_image | image_url: width: 1600 }}');"
+        {% endif %}
+        {{ block.shopify_attributes }}
+      >
+        <div class="two-col-item__content">
+          {% if block.settings.icon != blank %}
+            <div class="two-col-item__icon">
+              {{
+                block.settings.icon
+                | image_url: width: 200
+                | image_tag: loading: 'lazy', alt: block.settings.heading
+              }}
+            </div>
+          {% endif %}
+
+          {% if block.settings.heading != blank %}
+            <h3 class="two-col-item__heading">
+              {{ block.settings.heading }}
+            </h3>
+          {% endif %}
+
+          {% if block.settings.text != blank %}
+            <div class="two-col-item__text">
+              {{ block.settings.text }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .two-col-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .two-col-wrapper {
+    width: var(--inner-width);
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em;
+    padding: 1em;
+  }
+
+  .two-col-item {
+    width: 100%;
+    min-height: 350px;
+    padding: 2em;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    box-sizing: border-box;
+  }
+
+  .two-col-item__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Left alignment */
+
+  .two-col-item--left {
+    text-align: left;
+    align-items: flex-start;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+  }
+
+  .two-col-item--left .two-col-item__content {
+    align-items: flex-start;
+  }
+
+  /* Center alignment */
+
+  .two-col-item--center {
+    text-align: center;
+    align-items: center;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+  }
+
+  .two-col-item--center .two-col-item__content {
+    align-items: center;
+  }
+
+  /* Right alignment */
+
+  .two-col-item--right {
+    text-align: right;
+    align-items: flex-end;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+  }
+
+  .two-col-item--right .two-col-item__content {
+    align-items: flex-end;
+  }
+
+  .two-col-item__icon img {
+    display: block;
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+
+  .two-col-item__heading {
+    margin: 1rem 0 0.5rem;
+  }
+
+  .two-col-item__text {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .two-col-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Two Column Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Grid item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background image"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Information"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Content alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Two Column Grid",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

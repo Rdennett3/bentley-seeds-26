@@ -1,0 +1,167 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="three-col-container full-width">
+  <div class="three-col-wrapper">
+    {% for block in section.blocks %}
+      <div
+        class="three-col-item--{{ block.settings.alignment }}"
+        {{ block.shopify_attributes }}
+      >
+        {% if block.settings.icon != blank %}
+          <div class="three-col-item__icon">
+            {{ block.settings.icon | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.headline }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.headline != blank %}
+          <h3 class="three-col-item__headline">
+            {{ block.settings.headline }}
+          </h3>
+        {% endif %}
+
+        {% if block.settings.text != blank %}
+          <div class="three-col-item__text">
+            {{ block.settings.text }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .three-col-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .three-col-wrapper {
+    width: var(--inner-width);
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1em;
+    padding: 1em 0;
+  }
+
+  .three-col-item {
+    width: 100%;
+    border: 1px solid var(--black);
+    padding: 5%;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .three-col-item__icon img {
+    display: block;
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+
+  .three-col-item__headline {
+    margin: 1rem 0 0.5rem;
+  }
+
+  .three-col-item__text {
+    margin: 0;
+  }
+
+  .three-col-item--left {
+    text-align: left;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+    padding: 5%;
+  }
+
+  .three-col-item--center {
+    text-align: center;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+    padding: 5%;
+  }
+
+  .three-col-item--right {
+    text-align: right;
+    border: 1px solid var(--black);
+    border-radius: var(--radius);
+    padding: 5%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .three-col-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Three Column Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Grid item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Headline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Information"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Text alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "Three Column Grid",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
