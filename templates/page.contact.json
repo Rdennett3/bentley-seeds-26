@@ -1,5 +1,12 @@
 {
     "sections": {
+        "header_image": {
+            "type": "page-header-image",
+            "settings": {
+                "desktop_height": 450,
+                "mobile_height": 300
+            }
+        },
         "main": {
             "type": "contact-form",
             "settings": {
@@ -9,6 +16,7 @@
         }
     },
     "order": [
+        "header_image",
         "main"
     ]
 }
