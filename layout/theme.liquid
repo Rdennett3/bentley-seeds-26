@@ -27,6 +27,26 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js"></script>
+
+    <!-- BEGIN MerchantWidget Code -->
+
+    <script
+      id="merchantWidgetScript"
+
+      src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
+
+      defer
+    ></script>
+
+    <script type="text/javascript">
+      merchantWidgetScript.addEventListener('load', function () {
+        merchantwidget.start({
+          position: 'LEFT_BOTTOM',
+        });
+      });
+    </script>
+
+    <!-- END MerchantWidget Code -->
   </head>
 
   <body>

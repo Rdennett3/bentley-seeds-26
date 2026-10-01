@@ -28,7 +28,7 @@
         {% if section.settings.wholesale_text != blank %}
           <a
             class="mega-header__utility-link mega-header__wholesale"
-            href="{{ section.settings.wholesale_url | default: routes.account_login_url }}"
+            href="/apps/wpdapp/wholesale"
           >
             {{ section.settings.wholesale_text | escape }}
           </a>

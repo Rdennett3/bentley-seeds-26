@@ -83,75 +83,6 @@
           </div>
         {% endif %}
       </div>
-      {% comment %}
-        <div class="product-media">
-          {% if product.media.size > 0 %}
-            <div class="product-media__main">
-              {% for media in product.media %}
-                <div
-                  class="product-media__item{% if forloop.first %} is-active{% endif %}"
-                  data-product-media="{{ media.id }}"
-                >
-                  {% case media.media_type %}
-                    {% when 'image' %}
-                      {{
-                        media
-                        | image_url: width: 1800
-                        | image_tag:
-                          loading: 'lazy',
-                          widths: '550, 750, 1100, 1500, 1800',
-                          sizes: '(min-width: 990px) 50vw, 100vw',
-                          class: 'product-media__image'
-                      }}
-
-                    {% when 'video' %}
-                      {{ media | video_tag: controls: true, class: 'product-media__video' }}
-
-                    {% when 'external_video' %}
-                      {{ media | external_video_tag: class: 'product-media__video' }}
-
-                    {% when 'model' %}
-                      {{
-                        media
-                        | model_viewer_tag: reveal: 'interaction', toggleable: true, class: 'product-media__model'
-                      }}
-                  {% endcase %}
-                </div>
-              {% endfor %}
-            </div>
-
-            {% if product.media.size > 1 %}
-              <div
-                class="product-media__thumbnails"
-                aria-label="Product media thumbnails"
-              >
-                {% for media in product.media %}
-                  <button
-                    type="button"
-                    class="product-media__thumbnail{% if forloop.first %} is-active{% endif %}"
-                    data-thumbnail-target="{{ media.id }}"
-                    aria-label="View product media {{ forloop.index }}"
-                  >
-                    {{
-                      media.preview_image
-                      | image_url: width: 180
-                      | image_tag:
-                        loading: 'lazy',
-                        widths: '90, 120, 180',
-                        sizes: '80px',
-                        class: 'product-media__thumbnail-image'
-                    }}
-                  </button>
-                {% endfor %}
-              </div>
-            {% endif %}
-          {% else %}
-            <div class="product-media__placeholder">
-              {{ 'product-1' | placeholder_svg_tag }}
-            </div>
-          {% endif %}
-        </div>
-      {% endcomment %}
 
       <!-- Product information -->
       <div class="product-details">
@@ -330,11 +261,348 @@
             {% endif %}
           {% endform %}
 
-          {% if product.description != blank %}
-            <div class="product-description rte">
-              {{ product.description }}
+          {% comment %}
+            {% if product.description != blank %}
+              <div class="extra-info-item">
+                <button
+                  type="button"
+                  class="product-description-toggle"
+                  aria-expanded="false"
+                  aria-controls="product-description-{{ section.id }}"
+                >
+                  <span id="desc">Description</span>
+
+                  <span class="accordion-icon" aria-hidden="true"> + </span>
+                </button>
+
+                <div
+                  id="product-description-{{ section.id }}"
+                  class="product-description-content"
+                >
+                  <div class="product-description rte">
+                    {{ product.description }}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endcomment %}
+
+          {% assign growing = product.metafields.custom.growing_instructions.value %}
+          {% assign seed_info = product.metafields.custom.seed_information.value %}
+          {% assign uses = product.metafields.custom.uses.value %}
+          {% assign additional = product.metafields.custom.additional_information.value %}
+
+          {% if growing != blank
+            or seed_info != blank
+            or uses != blank
+            or additional != blank
+            or product.description != blank
+          %}
+            <div class="extra-info-container">
+              <div class="extra-info-wrapper">
+                <div class="extra-info-item">
+                  <button
+                    type="button"
+                    class="extra-info-toggle"
+                    aria-expanded="false"
+                  >
+                    <span>Description</span>
+                    <span class="extra-info-icon" aria-hidden="true">+</span>
+                  </button>
+
+                  <div class="extra-info-content" id="desc-info">
+                    <div class="extra-info-content-inner">
+                      {{ product.description }}
+                      {% comment %}
+                        <ul>
+                          {% for item in growing %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endcomment %}
+                    </div>
+                  </div>
+                </div>
+                {% if growing != blank %}
+                  <div class="extra-info-item">
+                    <button
+                      type="button"
+                      class="extra-info-toggle"
+                      aria-expanded="false"
+                    >
+                      <span>Growing Instructions</span>
+                      <span class="extra-info-icon" aria-hidden="true">+</span>
+                    </button>
+
+                    <div class="extra-info-content">
+                      <div class="extra-info-content-inner">
+                        <ul>
+                          {% for item in growing %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if seed_info != blank %}
+                  <div class="extra-info-item">
+                    <button
+                      type="button"
+                      class="extra-info-toggle"
+                      aria-expanded="false"
+                    >
+                      <span>Seed Information</span>
+                      <span class="extra-info-icon" aria-hidden="true">+</span>
+                    </button>
+
+                    <div class="extra-info-content">
+                      <div class="extra-info-content-inner">
+                        <ul>
+                          {% for item in seed_info %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if uses != blank %}
+                  <div class="extra-info-item">
+                    <button
+                      type="button"
+                      class="extra-info-toggle"
+                      aria-expanded="false"
+                    >
+                      <span>Uses</span>
+                      <span class="extra-info-icon" aria-hidden="true">+</span>
+                    </button>
+
+                    <div class="extra-info-content">
+                      <div class="extra-info-content-inner">
+                        <ul>
+                          {% for item in uses %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if additional != blank %}
+                  <div class="extra-info-item">
+                    <button
+                      type="button"
+                      class="extra-info-toggle"
+                      aria-expanded="false"
+                    >
+                      <span>Additional Information</span>
+                      <span class="extra-info-icon" aria-hidden="true">+</span>
+                    </button>
+
+                    <div class="extra-info-content">
+                      <div class="extra-info-content-inner">
+                        <ul>
+                          {% for item in additional %}
+                            <li>{{ item }}</li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
             </div>
           {% endif %}
+
+          {% style %}
+            .accelerated-checkout-button {
+              background: var(--black);
+            }
+            .extra-info-wrapper {
+              width: 100%;
+            }
+
+            .extra-info-item {
+              width: 100%;
+            }
+
+            #desc-info p:last-of-type {
+              padding-bottom: 5%;
+            }
+
+            .extra-info-toggle {
+              width: 100%;
+              padding: 16px 0;
+
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 20px;
+
+              background: transparent;
+              border: 0;
+
+              font: inherit;
+              font-weight: 600;
+              text-align: left;
+
+              cursor: pointer;
+            }
+
+            .extra-info-icon {
+              font-size: 22px;
+              line-height: 1;
+              flex-shrink: 0;
+            }
+
+            /* CLOSED */
+            .extra-info-content {
+              display: grid;
+              grid-template-rows: 0fr;
+
+              transition: grid-template-rows 0.35s ease;
+            }
+
+            .extra-info-content-inner {
+              overflow: hidden;
+              display: flex;
+              flex-direction: column;
+              gap: 1em;
+            }
+
+            /* OPEN */
+            .extra-info-item.is-open .extra-info-content {
+              grid-template-rows: 1fr;
+            }
+
+            .extra-info-content-inner ul {
+              margin: 0;
+              padding: 0 0 18px 20px;
+            }
+          {% endstyle %}
+
+          {% comment %}
+            {% assign growing = product.metafields.custom.growing_instructions.value %}
+            {% assign seed_info = product.metafields.custom.seed_information.value %}
+            {% assign uses = product.metafields.custom.uses.value %}
+            {% assign additional = product.metafields.custom.additional_information.value %}
+
+            {% if growing != blank or seed_info != blank or uses != blank or additional != blank %}
+              <div class="extra-info-container">
+                <div class="extra-info-wrapper">
+                  {% if growing != blank %}
+                    <div class="extra-info-item">
+                      <h2>Growing Instructions</h2>
+                      <ul>
+                        {% for item in growing %}
+                          <li>{{ item }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  {% if seed_info != blank %}
+                    <div class="extra-info-item">
+                      <h2>Seed Information</h2>
+                      <ul>
+                        {% for item in seed_info %}
+                          <li>{{ item }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  {% if uses != blank %}
+                    <div class="extra-info-item">
+                      <h2>Uses</h2>
+                      <ul>
+                        {% for item in uses %}
+                          <li>{{ item }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+
+                  {% if additional != blank %}
+                    <div class="extra-info-item">
+                      <h2>Additional Information</h2>
+                      <ul>
+                        {% for item in additional %}
+                          <li>{{ item }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          {% endcomment %}
+
+          {% comment %}
+            <div class="extra-info-container">
+              <div class="extra-info-wrapper">
+                <div class="extra-info-item"></div>
+                <div class="extra-info-item"></div>
+                <div class="extra-info-item"></div>
+                <div class="extra-info-item"></div>
+              </div>
+            </div>
+          {% endcomment %}
+
+          {% stylesheet %}
+            .extra-info-container {
+              width: 100%;
+              height: auto;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-top: 1em;
+            }
+
+            .extra-info-wrapper {
+              width: 100%;
+              height: auto;
+              display: flex;
+              flex-direction: column;
+              gap: 1em;
+              /* display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 1em; */
+            }
+
+            .extra-info-item {
+              width: 100%;
+              height: auto;
+              border: 1px solid var(--black);
+              border-radius: var(--radius);
+              padding: 0 5%;
+            }
+
+            .extra-info-item h2 {
+              margin-bottom: 1em;
+              font-size: 1.15em;
+            }
+
+            .extra-info-item ul {
+              padding-inline-start: 20px;
+            }
+
+            .extra-info-item ul li {
+              margin-bottom: 10px;
+            }
+          {% endstylesheet %}
+
+          {% comment %}
+            {% if product.description != blank %}
+              <div class="product-description rte">
+                {{ product.description }}
+              </div>
+            {% endif %}
+          {% endcomment %}
 
           {% if section.settings.show_sku %}
             <p
@@ -372,7 +640,7 @@
       }
 
       .product-page-width {
-        width:var(--inner-width);
+        width:100%;
         max-width:var(--max-inner-width);
         /* width: min(
           calc(100% - 3rem),
@@ -478,6 +746,12 @@
       display: block;
     }
 
+    @media screen and (max-width:500px) {
+      .product-media__item.is-active {
+        margin-top:2em;
+      }
+    }
+
     .product-media__image,
     .product-media__video,
     .product-media__model {
@@ -542,9 +816,10 @@
 
       .product-title {
         margin: 0;
-        font-size: clamp(2rem, 3vw, 3rem);
+        font-size: clamp(2rem, 2.5vw, 3rem);
         line-height: 1.1;
-        font-weight: 400;
+        font-weight: 600;
+        color:var(--black);
       }
 
       .product-price {
@@ -759,6 +1034,64 @@
         margin-top: 1.5rem;
         font-size: 0.85rem;
         opacity: 0.7;
+      }
+
+      /* accordion style layout for description */
+
+      .product-description-accordion {
+        width: 100%;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        margin-top:5%;
+        padding-top:10px;
+        /* background:yellow; */
+      }
+
+      .product-description-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* padding: 18px 0; */
+        background: none;
+        border: 0;
+        cursor: pointer;
+        font: inherit;
+        text-align: left;
+      }
+
+      .product-description-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.35s ease;
+        /* height:0; */
+      }
+
+      .product-description-content > .product-description {
+        overflow: hidden;
+      }
+
+      .product-description-accordion.is-open .product-description-content {
+        grid-template-rows: 1fr;
+      }
+
+      .product-description {
+        padding-bottom: 0;
+        transition: padding 0.35s ease;
+      }
+
+      .product-description-accordion.is-open .product-description {
+        padding-bottom: 20px;
+      }
+
+      .accordion-icon {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .product-description-accordion button #desc {
+        font-size:1.5em;
+        font-weight:500;
       }
 
       /*
@@ -1081,6 +1414,36 @@
         });
       });
   })();
+
+  document.querySelectorAll('.product-description-accordion').forEach((accordion) => {
+  const toggle = accordion.querySelector('.product-description-toggle');
+  const icon = accordion.querySelector('.accordion-icon');
+
+  toggle.addEventListener('click', () => {
+    const isOpen = accordion.classList.toggle('is-open');
+
+    toggle.setAttribute('aria-expanded', isOpen);
+
+    icon.textContent = isOpen ? '−' : '+';
+  });
+});
+
+document.querySelectorAll('.extra-info-item').forEach((item) => {
+  const toggle = item.querySelector('.extra-info-toggle');
+  const icon = item.querySelector('.extra-info-icon');
+
+  if (!toggle) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = item.classList.toggle('is-open');
+
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+    if (icon) {
+      icon.textContent = isOpen ? '−' : '+';
+    }
+  });
+});
 </script>
 
 {% schema %}

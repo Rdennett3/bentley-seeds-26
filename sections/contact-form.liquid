@@ -1,0 +1,202 @@
+<section class="contact-section section-{{ section.id }}">
+  <div class="contact-container full-width">
+    {% if section.settings.heading != blank %}
+      <h1 class="contact-heading">
+        {{ section.settings.heading }}
+      </h1>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+      <div class="contact-intro">
+        {{ section.settings.text }}
+      </div>
+    {% endif %}
+
+    {% if page.content != blank %}
+      <div class="contact-page-content">
+        {{ page.content }}
+      </div>
+    {% endif %}
+
+    {% form 'contact', class: 'contact-form' %}
+      {% if form.posted_successfully? %}
+        <div class="contact-success" role="status">Thank you! Your message has been sent successfully.</div>
+      {% endif %}
+
+      {% if form.errors %}
+        <div class="contact-errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <div class="contact-form__row">
+        <div class="contact-form__field">
+          <label for="ContactFormName-{{ section.id }}"> Name </label>
+
+          <input
+            type="text"
+            id="ContactFormName-{{ section.id }}"
+            name="contact[name]"
+            value="{% if form.name %}{{ form.name }}{% endif %}"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="contact-form__field">
+          <label for="ContactFormEmail-{{ section.id }}"> Email </label>
+
+          <input
+            type="email"
+            id="ContactFormEmail-{{ section.id }}"
+            name="contact[email]"
+            value="{% if form.email %}{{ form.email }}{% endif %}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="contact-form__row">
+        <div class="contact-form__field">
+          <label for="ContactFormPhone-{{ section.id }}"> Phone </label>
+
+          <input
+            type="tel"
+            id="ContactFormPhone-{{ section.id }}"
+            name="contact[phone]"
+            value="{% if form.phone %}{{ form.phone }}{% endif %}"
+            autocomplete="tel"
+          >
+        </div>
+
+        <div class="contact-form__field">
+          <label for="ContactFormSubject-{{ section.id }}"> Subject </label>
+
+          <input
+            type="text"
+            id="ContactFormSubject-{{ section.id }}"
+            name="contact[subject]"
+          >
+        </div>
+      </div>
+
+      <div class="contact-form__field">
+        <label for="ContactFormMessage-{{ section.id }}"> Message </label>
+
+        <textarea
+          id="ContactFormMessage-{{ section.id }}"
+          name="contact[body]"
+          rows="8"
+          required
+        >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+      </div>
+
+      <button type="submit" class="contact-form__submit">Send Message</button>
+    {% endform %}
+  </div>
+</section>
+
+{% style %}
+  .section-{{ section.id }} {
+    padding: 80px 20px;
+  }
+
+  .section-{{ section.id }} .contact-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .section-{{ section.id }} .contact-heading {
+    margin: 0 0 15px;
+  }
+
+  .section-{{ section.id }} .contact-intro {
+    margin-bottom: 40px;
+  }
+
+  .section-{{ section.id }} .contact-form__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .section-{{ section.id }} .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+  }
+
+  .section-{{ section.id }} .contact-form__field label {
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .section-{{ section.id }} .contact-form__field input,
+  .section-{{ section.id }} .contact-form__field textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: inherit;
+    box-sizing: border-box;
+  }
+
+  .section-{{ section.id }} .contact-form__field textarea {
+    resize: vertical;
+  }
+
+  .section-{{ section.id }} .contact-form__submit {
+    padding: 14px 28px;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .section-{{ section.id }} .contact-success {
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+
+  .section-{{ section.id }} .contact-errors {
+    margin-bottom: 25px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .section-{{ section.id }} {
+      padding: 50px 20px;
+    }
+
+    .section-{{ section.id }} .contact-form__row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Contact form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text",
+      "default": "<p>Have a question? Send us a message and we'll get back to you.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

@@ -1,47 +1,112 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
 {% liquid
   assign related_products = product.metafields.custom.related_products.value
 %}
 
-{% if related_products != blank %}
-  <section class="product-recommendations section-{{ section.id }}">
-    <div class="product-recommendations__inner">
-      {% if section.settings.heading != blank %}
-        <h2 class="product-recommendations__heading">
-          {{ section.settings.heading }}
-        </h2>
-      {% endif %}
+<section
+  class="product-recommendations section-{{ section.id }}"
+  data-product-recommendations
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}"
+>
+  <div class="product-recommendations__inner">
+    {% if related_products != blank %}
+      <h2 class="product-recommendations__heading">
+        {{ section.settings.heading }}
+      </h2>
 
       <div class="product-recommendations__grid">
         {% for related_product in related_products limit: section.settings.products_to_show %}
-          <a
-            href="{{ related_product.url }}"
-            class="product-recommendations__item"
-          >
-            <div class="product-recommendations__image">
-              {% if related_product.featured_image %}
-                {{
-                  related_product.featured_image
-                  | image_url: width: 800
-                  | image_tag: loading: 'lazy', widths: '300, 400, 600, 800', alt: related_product.featured_image.alt
-                }}
-              {% endif %}
-            </div>
-
-            <div class="product-recommendations__info">
-              <h3 class="product-recommendations__title">
-                {{ related_product.title }}
-              </h3>
-
-              <div class="product-recommendations__price">
-                {{ related_product.price | money }}
+          {% render 'recommendation-product-card', product: related_product %}
+          {% comment %}
+            <a
+              href="{{ related_product.url }}"
+              class="product-recommendations__item"
+            >
+              <div class="product-recommendations__image">
+                {% if related_product.featured_image %}
+                  {{
+                    related_product.featured_image
+                    | image_url: width: 800
+                    | image_tag: loading: 'lazy', widths: '300, 400, 600, 800', alt: related_product.featured_image.alt
+                  }}
+                {% endif %}
               </div>
-            </div>
-          </a>
+
+              <div class="product-recommendations__info">
+                <h3 class="product-recommendations__title">
+                  {{ related_product.title }}
+                </h3>
+
+                <div class="product-recommendations__price">
+                  {{ related_product.price | money }}
+                </div>
+              </div>
+            </a>
+          {% endcomment %}
         {% endfor %}
       </div>
-    </div>
-  </section>
-{% endif %}
+
+    {% elsif recommendations.performed and recommendations.products_count > 0 %}
+      <h2 class="product-recommendations__heading">
+        {{ section.settings.heading }}
+      </h2>
+
+      <div class="product-recommendations__grid">
+        {% for related_product in recommendations.products %}
+          {% render 'recommendation-product-card', product: related_product %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% comment %}
+  {% liquid
+    assign related_products = product.metafields.custom.related_products.value
+  %}
+
+  {% if related_products != blank %}
+    <section class="product-recommendations section-{{ section.id }}">
+      <div class="product-recommendations__inner">
+        {% if section.settings.heading != blank %}
+          <h2 class="product-recommendations__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        <div class="product-recommendations__grid">
+          {% for related_product in related_products limit: section.settings.products_to_show %}
+            <a
+              href="{{ related_product.url }}"
+              class="product-recommendations__item"
+            >
+              <div class="product-recommendations__image">
+                {% if related_product.featured_image %}
+                  {{
+                    related_product.featured_image
+                    | image_url: width: 800
+                    | image_tag: loading: 'lazy', widths: '300, 400, 600, 800', alt: related_product.featured_image.alt
+                  }}
+                {% endif %}
+              </div>
+
+              <div class="product-recommendations__info">
+                <h3 class="product-recommendations__title">
+                  {{ related_product.title }}
+                </h3>
+
+                <div class="product-recommendations__price">
+                  {{ related_product.price | money }}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endcomment %}
 
 {% style %}
   .section-{{ section.id }} {
@@ -67,12 +132,15 @@
     display: block;
     text-decoration: none;
     color: inherit;
+    border:1px solid var(--black);
+    border-radius:var(--radius);
   }
 
   .section-{{ section.id }} .product-recommendations__image {
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
+    border-radius:var(--radius);
   }
 
   .section-{{ section.id }} .product-recommendations__image img {
@@ -93,6 +161,12 @@
   .section-{{ section.id }} .product-recommendations__title {
     margin: 0 0 5px;
     font-size: 1rem;
+    margin-top:5%;
+    padding:0 5%;
+  }
+
+  .product-recommendations__price {
+    padding:0 5% 5% 5%;
   }
 
   @media screen and (max-width: 749px) {
@@ -103,6 +177,46 @@
 
   }
 {% endstyle %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('[data-product-recommendations]');
+
+    sections.forEach((section) => {
+      // If manual recommendations already rendered,
+      // we don't need Shopify's automatic recommendations.
+      if (section.querySelector('.product-recommendations__grid')) {
+        return;
+      }
+
+      const url = section.dataset.url;
+
+      if (!url) return;
+
+      fetch(url)
+        .then((response) => response.text())
+        .then((text) => {
+          const html = document.createElement('div');
+          html.innerHTML = text;
+
+          const recommendations = html.querySelector('[data-product-recommendations]');
+
+          if (!recommendations) return;
+
+          const grid = recommendations.querySelector('.product-recommendations__grid');
+
+          if (grid) {
+            const currentInner = section.querySelector('.product-recommendations__inner');
+
+            currentInner.appendChild(grid);
+          }
+        })
+        .catch((error) => {
+          console.error('Product recommendations error:', error);
+        });
+    });
+  });
+</script>
 
 {% schema %}
 {

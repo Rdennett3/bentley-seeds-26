@@ -1,0 +1,24 @@
+<a
+  href="{{ product.url }}"
+  class="product-recommendations__item"
+>
+  <div class="product-recommendations__image">
+    {% if product.featured_image %}
+      {{
+        product.featured_image
+        | image_url: width: 800
+        | image_tag: loading: 'lazy', widths: '300, 400, 600, 800', alt: product.featured_image.alt
+      }}
+    {% endif %}
+  </div>
+
+  <div class="product-recommendations__info">
+    <h3 class="product-recommendations__title">
+      {{ product.title }}
+    </h3>
+
+    <div class="product-recommendations__price">
+      {{ product.price | money }}
+    </div>
+  </div>
+</a>
