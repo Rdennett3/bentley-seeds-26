@@ -1,0 +1,18 @@
+<section class="history-page">
+  <div class="history-page__inner">
+    <h1>{{ page.title }}</h1>
+
+    {% if page.content != blank %}
+      <div class="history-page__content">
+        {{ page.content }}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "History Page",
+  "settings": []
+}
+{% endschema %}
