@@ -94,15 +94,11 @@
   .timeline-track {
     display: flex;
     align-items: stretch;
-
-    gap: 1.5em;
-
+    gap: 5em;
     width: max-content;
-
-    padding-left: max(calc((100vw - var(--inner-width)) / 2), 20px);
-
-    padding-right: max(calc((100vw - var(--inner-width)) / 2), 20px);
-
+    padding: 0 10% 0 5%;
+    /* padding-left: max(calc((100vw - var(--inner-width)) / 2), 20px);
+    padding-right: max(calc((100vw - var(--inner-width)) / 2), 20px); */
     will-change: transform;
   }
 
@@ -111,15 +107,12 @@
   ----------------------------- */
 
   .timeline-card {
-    flex: 0 0 min(600px, 70vw);
-
+    flex: 0 0 min(400px, 50vw);
+    border: 1px solid var(--black);
     display: flex;
     flex-direction: column;
-
     overflow: hidden;
-
     border-radius: 10px;
-
     background: var(--off-white);
   }
 
