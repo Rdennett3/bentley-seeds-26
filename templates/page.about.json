@@ -1,11 +1,42 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "main": {
-            "type": "main-page",
-            "settings": {}
-        }
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
     },
-    "order": [
-        "main"
-    ]
+    "page_header_image_PeNnnW": {
+      "type": "page-header-image",
+      "name": "Page header image",
+      "settings": {
+        "image": "shopify://shop_images/internal-header-pattern.png",
+        "desktop_height": 450,
+        "mobile_height": 300
+      }
+    },
+    "rich_text_kpDAmm": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "",
+        "text": "<p>Bentley Seeds is a Privately held, family owned company located in Upstate&nbsp;New York</p><h2>Our Mission</h2><p>Since 1975 we've been in business to grow good things.&nbsp;</p><h5>Grow More&nbsp;</h5><p>In a world where fresh is best we want gardening to be fun and accessible to everyone. We write easy to follow growing instructions to encourage new gardeners to jump right in. We also include space information for those who may be limited to small areas&nbsp;or containers. We also cater to the seasoned professional by having over 130 different varieties of flowers, veggies and herbs to choose from. Our fresh crop, Non-GMO seeds come from the very best sources to ensure that no matter your skill level, you will have success at growing good things.</p>",
+        "button_label": "",
+        "button_link": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "page_header_image_PeNnnW",
+    "rich_text_kpDAmm"
+  ]
 }

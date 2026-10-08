@@ -1,0 +1,64 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header_image_L8EK3r": {
+      "type": "page-header-image",
+      "name": "Page header image",
+      "settings": {
+        "image": "shopify://shop_images/internal-header-pattern.png",
+        "desktop_height": 450,
+        "mobile_height": 300
+      }
+    },
+    "rich_text_awadRC": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "Wholesale About",
+        "text": "<p>Becoming a wholesale partner with Bentley Seed Co. is easy! Simply navigate to the <a href=\"https://bentleyseeds.com/apps/wpdapp\" target=\"_blank\" title=\"https://bentleyseeds.com/apps/wpdapp\">Wholesale Signup</a> section of our website and complete the form. Once we have this information, we'll designate you as a wholesale partner, enabling you to place orders directly on our website with a wholesale discount.</p><p>If you already have a wholesaler account, please <a href=\"https://bentleyseeds.com/apps/wpdapp/wholesale\" target=\"_blank\" title=\"https://bentleyseeds.com/apps/wpdapp/wholesale\">log in now</a>.<br/><br/>Browse our <a href=\"https://online.fliphtml5.com/dzrou/jjnp/#p=1\" target=\"_blank\" title=\"https://online.fliphtml5.com/dzrou/jjnp/#p=1\">2025 Flip Book Wholesale Catalog </a>to explore our full selection of flower, herb, and vegetable seed packets, along with our seed packet displays.&nbsp;</p>",
+        "button_label": "2027 Flip Book Wholesale Catalog",
+        "button_link": ""
+      }
+    },
+    "two_col_grid_MgPHKd": {
+      "type": "two-col-grid",
+      "blocks": {
+        "item_BF33Bh": {
+          "type": "item",
+          "settings": {
+            "heading": "",
+            "text": "",
+            "alignment": "left"
+          }
+        },
+        "item_fHqbrG": {
+          "type": "item",
+          "settings": {
+            "heading": "",
+            "text": "",
+            "alignment": "left"
+          }
+        }
+      },
+      "block_order": [
+        "item_BF33Bh",
+        "item_fHqbrG"
+      ],
+      "name": "Two Column Grid",
+      "settings": {}
+    }
+  },
+  "order": [
+    "page_header_image_L8EK3r",
+    "rich_text_awadRC",
+    "two_col_grid_MgPHKd"
+  ]
+}

@@ -12,38 +12,20 @@
     "header_image": {
       "type": "page-header-image",
       "settings": {
-        "image": "shopify://shop_images/garden-new.webp",
+        "image": "shopify://shop_images/internal-header-pattern.png",
         "desktop_height": 450,
         "mobile_height": 300
       }
     },
-    "two_col_grid_iBNeJk": {
-      "type": "two-col-grid",
-      "blocks": {
-        "item_b78AMp": {
-          "type": "item",
-          "settings": {
-            "heading": "",
-            "text": "<p><strong>Sign up to become a Wholesale Partner!</strong></p><p>We can tag&nbsp;your business so ordering directly on our website with wholesale pricing is a breeze!&nbsp;Please email <a href=\"mailto:sales@bentleyseeds.com?subject=Wholesale%20Tag&body=Please%20add%20me%20to%20your%20list%20of%20verified%20wholesale%20partners%20to%20recieve%20my%20discount%20on%20refill%20orders%20and%20other%20packets.\" target=\"_blank\">sales@bentleyseeds.com</a>&nbsp;and include&nbsp;your resale certification and a picture of&nbsp;your physical location.</p><p></p><p><strong>General Contact</strong></p><p>Our Customer Service team is available Monday through Friday&nbsp;<strong>8:00AM-4:00PM</strong>&nbsp;EST. For the quickest response, email&nbsp;<a href=\"mailto:sales@bentleyseeds.com?subject=General%20Contact\">sales@bentleyseeds.com</a>&nbsp;and a customer service agent will be glad to assist you. You can also call&nbsp;<a href=\"https://www.google.com/search?q=bentley+seeds&sca_esv=d7a897ae2fa4bc83&sxsrf=APpeQnsidPYXZrfUL622jpLpu--QZoKscQ%3A1783443335262&source=hp&ei=hy9NaueGDZfomLQPqdS-uAs&iflsig=ABILxe8AAAAAak09l60g2JxQTV7XxWS7CDPLUlxzvDON&ved=0ahUKEwin5uOThMGVAxUXNIYAHSmqD7cQ4dUDCC8&uact=5&oq=bentley+seeds&gs_lp=Egdnd3Mtd2l6Ig1iZW50bGV5IHNlZWRzMgQQIxgnMgQQIxgnMgsQLhiABBjRAxjHATILEC4YgAQYxwEYrwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIGEAAYFhgeSIsYUABYhxVwAngAkAEAmAF-oAHtC6oBAzguN7gBA8gBAPgBAZgCEaACmgzCAg4QLhiABBixAxiDARiKBcICDhAAGIAEGLEDGIMBGIoFwgIREAAYgAQYsQMYgwEYigUYjQbCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGLEDGIMBwgIOEC4YgAQYsQMYxwEYrwHCAg4QABiABBixAxiKBRiNBsICCBAAGIAEGLEDwgIIEC4YgAQYsQPCAgQQABgDwgIHEAAYgAQYCpgDAJIHBDUuMTKgB83yAbIHBDMuMTK4B5YMwgcGMS4xNC4yyAcegAgA&sclient=gws-wiz#\">(518) 888-2571</a>&nbsp;and the next available agent will take your call. If contacting us outside of business hours, we will respond the next business day.</p>",
-            "alignment": "left"
-          }
-        },
-        "item_D4hgBe": {
-          "type": "item",
-          "settings": {
-            "background_image": "shopify://shop_images/holidays-26-collection.webp",
-            "heading": "",
-            "text": "",
-            "alignment": "left"
-          }
-        }
-      },
-      "block_order": [
-        "item_b78AMp",
-        "item_D4hgBe"
-      ],
-      "name": "Two Column Grid",
-      "settings": {}
+    "rich_text_QmCVtF": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "Sign up to become a Wholesale Partner!",
+        "text": "<p>We can tag&nbsp;your business so ordering directly on our website with wholesale pricing is a breeze!&nbsp;Please email <a href=\"mailto:sales@bentleyseeds.com?subject=Wholesale%20Tag&body=Please%20add%20me%20to%20your%20list%20of%20verified%20wholesale%20partners%20to%20recieve%20my%20discount%20on%20refill%20orders%20and%20other%20packets.\" target=\"_blank\">sales@bentleyseeds.com</a>&nbsp;and include&nbsp;your resale certification and a picture of&nbsp;your physical location.</p>",
+        "button_label": "",
+        "button_link": ""
+      }
     },
     "main": {
       "type": "contact-form",
@@ -87,11 +69,22 @@
       ],
       "name": "Three Column Grid",
       "settings": {}
+    },
+    "rich_text_zgRjFx": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "General Contact",
+        "text": "<p>Our Customer Service team is available Monday through Friday&nbsp;<strong>8:00AM-4:00PM</strong>&nbsp;EST. For the quickest response, email&nbsp;<a href=\"mailto:sales@bentleyseeds.com?subject=General%20Contact\">sales@bentleyseeds.com</a>&nbsp;and a customer service agent will be glad to assist you. You can also call&nbsp;<a href=\"https://www.google.com/search?q=bentley+seeds&sca_esv=d7a897ae2fa4bc83&sxsrf=APpeQnsidPYXZrfUL622jpLpu--QZoKscQ%3A1783443335262&source=hp&ei=hy9NaueGDZfomLQPqdS-uAs&iflsig=ABILxe8AAAAAak09l60g2JxQTV7XxWS7CDPLUlxzvDON&ved=0ahUKEwin5uOThMGVAxUXNIYAHSmqD7cQ4dUDCC8&uact=5&oq=bentley+seeds&gs_lp=Egdnd3Mtd2l6Ig1iZW50bGV5IHNlZWRzMgQQIxgnMgQQIxgnMgsQLhiABBjRAxjHATILEC4YgAQYxwEYrwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIGEAAYFhgeSIsYUABYhxVwAngAkAEAmAF-oAHtC6oBAzguN7gBA8gBAPgBAZgCEaACmgzCAg4QLhiABBixAxiDARiKBcICDhAAGIAEGLEDGIMBGIoFwgIREAAYgAQYsQMYgwEYigUYjQbCAg4QLhiABBixAxjRAxjHAcICCxAAGIAEGLEDGIMBwgIOEC4YgAQYsQMYxwEYrwHCAg4QABiABBixAxiKBRiNBsICCBAAGIAEGLEDwgIIEC4YgAQYsQPCAgQQABgDwgIHEAAYgAQYCpgDAJIHBDUuMTKgB83yAbIHBDMuMTK4B5YMwgcGMS4xNC4yyAcegAgA&sclient=gws-wiz#\">(518) 888-2571</a>&nbsp;and the next available agent will take your call. If contacting us outside of business hours, we will respond the next business day.</p>",
+        "button_label": "",
+        "button_link": ""
+      }
     }
   },
   "order": [
     "header_image",
-    "two_col_grid_iBNeJk",
+    "rich_text_QmCVtF",
+    "rich_text_zgRjFx",
     "main",
     "three_col_grid_DcLpDP"
   ]

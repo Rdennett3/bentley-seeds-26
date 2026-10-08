@@ -73,6 +73,10 @@ h1 {
   font-size: clamp(2.25em, 4vw, 6em);
 }
 
+h2 {
+  font-size: clamp(1.75em, 3vw, 5em);
+}
+
 p:empty {
   display: none;
 }
