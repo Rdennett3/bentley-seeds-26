@@ -1,11 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "main": {
-            "type": "wholesale-resources",
-            "settings": {}
-        }
+  "sections": {
+    "page_header_image_M8qTR3": {
+      "type": "page-header-image",
+      "name": "Page header image",
+      "settings": {
+        "desktop_height": 450,
+        "mobile_height": 300
+      }
     },
-    "order": [
-        "main"
-    ]
+    "rich_text_YfYpHg": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "Welcome Retail Partners!",
+        "text": "<p>We've curated a comprehensive collection of retail resources to help you get set up and start selling Bentley Seeds products with confidence. From store setup guides to marketing materials, everything you need is just a click away.</p><p>Have questions or need support? Our team is here to help — contact us anytime at <a>sales@bentleyseeds.com</a>.</p>",
+        "button_label": "",
+        "button_link": ""
+      }
+    }
+  },
+  "order": [
+    "page_header_image_M8qTR3",
+    "rich_text_YfYpHg"
+  ]
 }

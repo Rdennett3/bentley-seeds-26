@@ -1,0 +1,29 @@
+<div
+  class="custom-liquid-section custom-liquid-section--{{ section.id }}"
+  id="CustomLiquid-{{ section.id }}"
+>
+  <div class="custom-liquid-section__inner">
+    {{ section.settings.custom_liquid }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom HTML / Liquid",
+  "tag": "section",
+  "class": "section-custom-liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom HTML / Liquid",
+      "info": "Add custom HTML or Liquid code here."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom HTML / Liquid"
+    }
+  ]
+}
+{% endschema %}
