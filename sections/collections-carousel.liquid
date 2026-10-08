@@ -1,0 +1,347 @@
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+{{ 'variables.css' | asset_url | stylesheet_tag }}
+
+<div class="collection-carousel-container">
+  <div class="collection-carousel-wrapper">
+    <div class="carousel-header">
+      <div class="carousel-header-item">
+        <h2>Shop By Special Occassion</h2>
+      </div>
+      <div class="carousel-header-item">
+        <div class="controls-container">
+          <div class="swiper-button-prev-cust">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <div class="swiper-button-next-cust">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swiper collection-carousel-swiper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% liquid
+            assign collection = block.settings.collection
+            assign slide_image = block.settings.image
+            assign slide_title = block.settings.title
+
+            if slide_image == blank and collection != blank
+              assign slide_image = collection.featured_image
+            endif
+
+            if slide_title == blank and collection != blank
+              assign slide_title = collection.title
+            endif
+          %}
+
+          <div
+            class="swiper-slide collection-carousel-slide"
+            {{ block.shopify_attributes }}
+          >
+            {% if collection != blank %}
+              <a
+                href="{{ collection.url }}"
+                class="collection-carousel-slide__link"
+              >
+            {% endif %}
+
+            {% if slide_image != blank %}
+              <div class="collection-carousel-slide__image">
+                {{
+                  slide_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800, 1000, 1200',
+                    sizes: '(min-width: 750px) 33vw, 80vw',
+                    alt: slide_title
+                }}
+              </div>
+            {% endif %}
+
+            {% if slide_title != blank %}
+              <div class="collection-carousel-slide__content">
+                <h3 class="collection-carousel-slide__title">
+                  {{ slide_title }}
+                </h3>
+              </div>
+            {% endif %}
+
+            {% if collection != blank %}
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      {% comment %}
+        <div class="controls-container">
+          <div class="swiper-button-prev-cust">Previous</div>
+          <div class="swiper-button-next-cust">Next</div>
+        </div>
+      {% endcomment %}
+      <div class="scrollbar-container">
+        <div class="swiper-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .carousel-header {
+    width: 100%;
+    height: auto;
+    padding: 2.5% 0;
+    /* border: 1px solid red; */
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .carousel-header h2 {
+    margin: 0 0 12px;
+    text-align: left;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.1;
+  }
+
+  .collection-carousel-container {
+    width: 100%;
+    height: auto;
+    padding: 2.5% 0;
+  }
+
+  .collection-carousel-slide {
+    border: 1px solid var(--black);
+    min-height: 40vh;
+    border-radius: var(--radius);
+  }
+
+  .collection-carousel-slide__link {
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .collection-carousel-slide__title {
+    font-size: 1.5em;
+    font-weight: 100;
+    text-align: left;
+  }
+
+  .swiper-scrollbar {
+    margin-top: 5%;
+  }
+
+  .collection-carousel-slide__image img {
+    width: 100%;
+    height: 40vh;
+    object-fit: cover;
+    /* border-radius: var(--radius); */
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+  }
+
+  .collection-carousel-slide__content {
+    min-height: 10vh;
+    /* padding: 2.5% 0; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* padding: 5% 0 0 5%; */
+    background: #fff;
+    border-bottom-right-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+  }
+
+  .scrollbar-container {
+    width: 100%;
+    height: auto;
+    /* padding: 2.5% 0; */
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid red; */
+  }
+
+  .carousel-header {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .carousel-header-item {
+    width: 100%;
+    height: auto;
+  }
+
+  .controls-container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5em;
+  }
+
+  .swiper-button-next-cust,
+  .swiper-button-prev-cust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    color: #000;
+    background: #f4912b;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 750px) {
+    .carousel-header {
+      flex-direction: column;
+    }
+
+    .controls-container {
+      width: 100%;
+      height: auto;
+      padding: 2.5% 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+    }
+    .scrollbar-container {
+      display: none;
+    }
+  }
+
+  /* fix issue with highlighting first item after scroll */
+  .collection-carousel-slide,
+  .collection-carousel-slide__link {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .collection-carousel-slide img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+  }
+{% endstylesheet %}
+
+<script>
+  const collectionSwiper = new Swiper('.collection-carousel-swiper', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+
+    scrollbar: {
+      el: '.swiper-scrollbar',
+    },
+
+    navigation: {
+      nextEl: '.swiper-button-next-cust',
+      prevEl: '.swiper-button-prev-cust',
+    },
+
+    breakpoints: {
+      750: {
+        slidesPerView: 2.4,
+        spaceBetween: 24,
+      },
+
+      990: {
+        slidesPerView: 3.5,
+        spaceBetween: 10,
+      },
+    },
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection Carousel",
+  "tag": "section",
+  "class": "collection-carousel-section",
+  "max_blocks": 12,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "If left blank, the collection's featured image will be used."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "If left blank, the collection title will be used."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Carousel",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

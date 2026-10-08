@@ -309,11 +309,12 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      padding: 6px 10px;
+      padding: 10px 20px;
       color: var(--seed-finder-background);
       background: var(--seed-finder-text);
       font-size: 12px;
       line-height: 1;
+      border-radius:10px;
     }
 
     #SeedFinder-{{ section.id }} .seed-finder__product-content {
@@ -356,13 +357,15 @@
 
     #SeedFinder-{{ section.id }} .seed-finder__product-title a {
       color:var(--black);
+      text-decoration:none;
     }
 
     #SeedFinder-{{ section.id }} .seed-finder__price {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      font-size: 15px;
+      font-size: 1.11em;
+      margin-top:1em;
     }
 
     #SeedFinder-{{ section.id }} .seed-finder__compare-price {
@@ -501,7 +504,7 @@
     appearance: none;
   }
 
-  /* #SeedFinder-{{ section.id }} .seed-finder__add-to-cart {
+  #SeedFinder-{{ section.id }} .seed-finder__add-to-cart {
     flex: 1;
     min-width: 130px;
     min-height: 44px;
@@ -512,7 +515,7 @@
     border-radius: {{ section.settings.button_border_radius }}px;
     cursor: pointer;
     font: inherit;
-  } */
+  }
 
   #SeedFinder-{{ section.id }} .seed-finder__add-to-cart:hover:not(:disabled) {
     color: {{ section.settings.button_text_color }};

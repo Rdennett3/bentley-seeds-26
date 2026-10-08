@@ -1,5 +1,5 @@
 :root {
-    --inner-width: 95%;
+    --inner-width: 90%;
     --max-width: 1700px;
     --max-inner-width: 1700px;
     --black: #0D0C1D;
@@ -16,17 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* height: 45px;
-    padding: 13px 40px;
-    max-width: 400px;
-    margin: 10px 7px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 2px;
-    color: var(--black);
-    background: var(--orange);
-    border: 2px var(--black) solid;
-    border-radius: 25px; */
     text-transform: uppercase;
     outline: 0;
     overflow: hidden;
@@ -38,9 +27,6 @@
     -moz-transition: 0.1s ease-in;
     -webkit-transition: 0.1s ease-in;
     text-decoration: none;
-    /* display: inline-flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
     padding: 13px 40px;
     color: #000;
     background: var(--orange);

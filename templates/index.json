@@ -155,6 +155,78 @@
         "button_link": "shopify://pages/about-bentley-seed-company-we-grow-good-things"
       }
     },
+    "collections_carousel_zVAJxR": {
+      "type": "collections-carousel",
+      "blocks": {
+        "collection_3mgbnQ": {
+          "type": "collection",
+          "settings": {
+            "collection": "holiday-seed-packets",
+            "image": "shopify://shop_images/holidays-26-collection.webp",
+            "title": ""
+          }
+        },
+        "collection_VEMhLf": {
+          "type": "collection",
+          "settings": {
+            "collection": "wedding-seed-packets",
+            "image": "shopify://shop_images/wedding.webp",
+            "title": ""
+          }
+        },
+        "collection_bN4J4n": {
+          "type": "collection",
+          "settings": {
+            "collection": "baby-shower-seed-favors",
+            "image": "shopify://shop_images/baby.webp",
+            "title": ""
+          }
+        },
+        "collection_MCnt7D": {
+          "type": "collection",
+          "settings": {
+            "collection": "seed-packets-for-memorials-and-funerals-1",
+            "image": "shopify://shop_images/memorial.webp",
+            "title": ""
+          }
+        },
+        "collection_XeJ7aG": {
+          "type": "collection",
+          "settings": {
+            "collection": "seasonal-seed-packets",
+            "image": "shopify://shop_images/fall.webp",
+            "title": ""
+          }
+        },
+        "collection_Bjw8nV": {
+          "type": "collection",
+          "settings": {
+            "collection": "pollinator-environmental-seed-packets",
+            "image": "shopify://shop_images/pollinator.webp",
+            "title": ""
+          }
+        },
+        "collection_zAfe97": {
+          "type": "collection",
+          "settings": {
+            "collection": "love",
+            "image": "shopify://shop_images/love_1.webp",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_3mgbnQ",
+        "collection_VEMhLf",
+        "collection_bN4J4n",
+        "collection_MCnt7D",
+        "collection_XeJ7aG",
+        "collection_Bjw8nV",
+        "collection_zAfe97"
+      ],
+      "name": "Collection Carousel",
+      "settings": {}
+    },
     "seed_finder_JCLGm6": {
       "type": "seed-finder",
       "blocks": {
@@ -280,6 +352,7 @@
         "occasion_tPRMpK",
         "occasion_te6eYE"
       ],
+      "disabled": true,
       "name": "Homepage Occasion",
       "settings": {}
     }
@@ -291,6 +364,7 @@
     "homepage_expandable_collections_pDhCGm",
     "pinned_grow_7QUgAV",
     "homepage_grow_KcdKeH",
+    "collections_carousel_zVAJxR",
     "seed_finder_JCLGm6",
     "homepage_occasion_fjdgNK"
   ]
