@@ -115,8 +115,8 @@
     justify-content: flex-start;
   }
 
-  .featured-blog-header-wrapper h2 {
-    font-size: clamp(2em, 4vw, 6em);
+  .featured-blog-wrapper h2 {
+    /* font-size: clamp(2em, 4vw, 6em); */
     font-weight: 400;
   }
 
@@ -167,7 +167,7 @@
     gap: 1em;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 10% 0 0 5%;
+    padding: 5% 0 0 5%;
   }
 
   .featured-blog-section:nth-of-type(2) h2 a {
@@ -208,11 +208,11 @@
           </div>
 
           <div class="info-wrapper">
-            <h2 class="article-title">
+            <h3 class="article-title">
               <a href="{{ article.url }}">
                 {{ article.title }}
               </a>
-            </h2>
+            </h3>
 
             <div class="article-meta">
               <span class="article-blog">

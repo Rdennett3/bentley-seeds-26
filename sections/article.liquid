@@ -10,7 +10,9 @@
   {% if article.image %}
     {{ article.image | image_url: width: 1000 | image_tag }}
   {% endif %}
+{% endcomment %}
 
+{% comment %}
   <h1>{{ article.title }}</h1>
 
   {% assign date = article.published_at | time_tag: format: 'date' %}
@@ -62,6 +64,86 @@
       <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
     {% endform %}
   {% endif %}
+{% endcomment %}
+
+{% stylesheet %}
+  .article-content {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  .article-content h1,
+  .article-content h2,
+  .article-content h3,
+  .article-content h4,
+  .article-content h5,
+  .article-content h6 {
+    font-family: inherit;
+    color: inherit;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .article-content p {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0 0 1em;
+  }
+
+  .article-content ul,
+  .article-content ol {
+    margin: 0 0 1em;
+    padding-left: 1.5em;
+  }
+
+  .article-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .article-content,
+  .article-content p,
+  .article-content li,
+  .article-content span,
+  .article-content div {
+    font-family: inherit !important;
+    color: inherit !important;
+    line-height: inherit !important;
+  }
+
+  .article-content p,
+  .article-content li {
+    font-size: 1rem !important;
+  }
+
+  .article-content h1,
+  .article-content h2,
+  .article-content h3,
+  .article-content h4,
+  .article-content h5,
+  .article-content h6 {
+    font-family: inherit !important;
+    color: inherit !important;
+  }
+{% endstylesheet %}
+
+{% comment %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const article = document.querySelector('.article-content');
+
+      if (!article) return;
+
+      article.querySelectorAll('[style]').forEach((element) => {
+        element.removeAttribute('style');
+      });
+    });
+  </script>
 {% endcomment %}
 
 {% schema %}
